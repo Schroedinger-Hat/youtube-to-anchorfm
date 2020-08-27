@@ -7,7 +7,7 @@ const password = process.env.ANCHOR_PASSWORD;
 const episode = JSON.parse(fs.readFileSync('episode.json', 'utf-8'));
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     const navigationPromise = page.waitForNavigation();
