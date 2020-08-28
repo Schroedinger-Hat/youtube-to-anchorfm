@@ -3,7 +3,7 @@ const fs = require('fs')
 const { exec } = require('child_process');
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
-const pathToEpisodeJSON = '.github/episode.json';
+const pathToEpisodeJSON = __dirname + '/.github/episode.json';
 const outputFile = 'episode.webm'
 
 try {
