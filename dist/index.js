@@ -1,5 +1,4 @@
 const youtubedl = require('youtube-dl')
-const fs = require('fs')
 const { exec } = require('child_process');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
