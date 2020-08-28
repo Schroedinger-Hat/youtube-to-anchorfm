@@ -14,7 +14,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
-      - uses: 
       - name: Install And Configure youtube-dl
         run: |
           sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
