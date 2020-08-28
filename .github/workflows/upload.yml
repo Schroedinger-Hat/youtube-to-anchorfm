@@ -14,18 +14,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
-
       - name: Install And Configure youtube-dl
         run: |
           sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
           sudo chmod a+rx /usr/local/bin/youtube-dl
-
-      - name: Install Deps and donwload audio file from youtube video defined in episode.json
+      - name: Install Deps, donwload audio file from youtube video defined in episode.json and upload to anchor
         run: |
           npm install
-          npm run download-audio-yt
-      - name: Upload Episode To Anchor by Puppeteer
+          npm run upload
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
-        run: npm run upload-audio-anchor

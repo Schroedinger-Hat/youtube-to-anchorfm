@@ -10,7 +10,8 @@
   "devDependencies": {},
   "scripts": {
     "download-audio-yt": "node download-episode.js",
-    "upload-audio-anchor": "node upload-episode.js"
+    "upload-audio-anchor": "node upload-episode.js",
+    "upload": "npm run download-audio-yt && npm run upload-audio-anchor"
   },
   "author": "thejoin",
   "license": "MIT"
