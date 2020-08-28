@@ -3,7 +3,7 @@ name: Upload Episode from YouTube To Anchor.Fm
 on:
   push:
     paths: 
-      - episode.json
+      - .github/episode.json
     branches: [master]
 
 jobs:
