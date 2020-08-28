@@ -4,7 +4,7 @@ const fs = require('fs');
 const email = process.env.ANCHOR_EMAIL;
 const password = process.env.ANCHOR_PASSWORD;
 
-const episode = JSON.parse(fs.readFileSync(__dirname + '/.github/episode.json', 'utf-8'));
+const episode = JSON.parse(fs.readFileSync('./.github/episode.json', 'utf-8'));
 
 (async () => {
     const browser = await puppeteer.launch();
