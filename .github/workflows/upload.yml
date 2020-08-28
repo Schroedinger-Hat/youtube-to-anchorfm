@@ -4,7 +4,7 @@ on:
   push:
     paths: 
       - episode.json
-    branches: [master]
+    branches: [demo]
 
 jobs:
   upload_episode:
