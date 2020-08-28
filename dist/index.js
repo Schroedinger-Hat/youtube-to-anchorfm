@@ -12,7 +12,7 @@ exec('npm i -g youtube-dl', (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`)
 });
 
-exec('node download-episode.js', (error, stdout, stderr) => {
+exec('node dist/download-episode.js', (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
       return
@@ -24,7 +24,7 @@ exec('node download-episode.js', (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`)
 });
 
-exec('node upload-episode.js', (error, stdout, stderr) => {
+exec('node dist/upload-episode.js', (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
       return
