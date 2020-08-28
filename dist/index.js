@@ -1,6 +1,4 @@
-const youtubedl = require('youtube-dl')
 const { exec } = require('child_process');
-const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 const email = process.env.ANCHOR_EMAIL;
@@ -10,7 +8,7 @@ const YT_URL = 'https://www.youtube.com/watch?v=';
 const pathToEpisodeJSON = 'episode.json';
 const outputFile = 'episode.webm';
 
-exec('npm i -g youtube-dl', (error, stdout, stderr) => {
+exec('npm i -g youtube-dl && npm i puppeteer', (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
       return
@@ -21,6 +19,9 @@ exec('npm i -g youtube-dl', (error, stdout, stderr) => {
     }
     console.log(`stdout: ${stdout}`)
 });
+
+const youtubedl = require('youtube-dl')
+const puppeteer = require('puppeteer');
 
 try {
     const epConfJSON = JSON.parse(fs.readFileSync(pathToEpisodeJSON, 'utf-8'));
