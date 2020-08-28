@@ -1,5 +1,7 @@
 # Youtube to Anchor.fm - An automation tool to publish your podcast
 
+![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/master/assets/img/cover.png "Cover image")
+
 You will thank us later, now you should give us a star.
 
 Come on... Don't be shy.
