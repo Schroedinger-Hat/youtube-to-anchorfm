@@ -1,0 +1,22 @@
+name: 'Upload Episode from YouTube To Anchor.Fm'
+description: 'An automation tool to publish your podcast from youtube to anchor.fm'
+branding:
+  icon: 'upload-cloud'  
+  color: 'green'
+inputs:
+  anchor-email:
+    description: 'Anchor\'s account email'
+    required: true
+  anchor-password:
+    description: 'Anchor\'s account password'
+    required: true
+runs:
+  using: "composite"
+  steps: 
+    - run: |
+        sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+        sudo chmod a+rx /usr/local/bin/youtube-dl
+    - run: |
+        npm install
+        npm run download-audio-yt
+    - run: npm run upload-audio-anchor
