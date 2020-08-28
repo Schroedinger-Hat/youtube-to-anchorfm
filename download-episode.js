@@ -3,7 +3,7 @@ const fs = require('fs')
 const { exec } = require('child_process');
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
-const pathToEpisodeJSON = 'episode.json';
+const pathToEpisodeJSON = '.github/episode.json';
 const outputFile = 'episode.webm'
 
 try {
@@ -35,26 +35,6 @@ try {
       console.log(`stdout: ${stdout}`)
         fs.writeFileSync(pathToEpisodeJSON, JSON.stringify(epConfJSON));
     });
-    
-    // video.on('info', function(info) {
-    //     console.log('Download started')
-    //     console.log('filename: ' + info._filename)
-        
-    //     // info.size will be the amount to download, add
-    //     let total = info.size
-    //     console.log('size: ' + total)
-    // });
-    
-    // video.pipe(fs.createWriteStream(outputFile, { flags: 'a' }))
-    
-    // video.on('complete', function complete(info) {
-    //     console.log('filename: ' + info._filename + ' already downloaded.')
-    // });
-    
-    // video.on('end', function() {
-    //     console.log('finished downloading!');
-    //     fs.writeFileSync(pathToEpisodeJSON, JSON.stringify(epConfJSON));
-    // })
 } catch (error) {
     throw error;
 }
