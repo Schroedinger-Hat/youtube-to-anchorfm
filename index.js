@@ -1,8 +1,8 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
-const email = process.env.ANCHOR_EMAIL;
-const password = process.env.ANCHOR_PASSWORD;
+const email = 'x' || process.env.ANCHOR_EMAIL;
+const password = 'c' || process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
@@ -10,7 +10,7 @@ const pathToEpisodeJSON = 'episode.json';
 const outputFile = 'episode.webm';
 
 console.log('installing dependecies');
-exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && npm i youtube-dl && npm i puppeteer', (error, stdout, stderr) => {
+exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm install puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
     }
@@ -52,7 +52,7 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
             
                 (async () => {
                     console.log("Launching puppeteer");
-                    const browser = await puppeteer.launch();
+                    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
                     const page = await browser.newPage();
             
                     const navigationPromise = page.waitForNavigation();
