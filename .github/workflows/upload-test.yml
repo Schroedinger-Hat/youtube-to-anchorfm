@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "12"
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.0.9e
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.0.9f
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
