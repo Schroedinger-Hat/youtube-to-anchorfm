@@ -2,7 +2,7 @@
   "name": "yt-to-anchor",
   "version": "1.0.0",
   "description": "",
-  "main": "download-episode.js",
+  "main": "index.js",
   "dependencies": {
     "puppeteer": "^5.2.1",
     "youtube-dl": "^3.0.2"
@@ -12,6 +12,10 @@
     "download-audio-yt": "node download-episode.js",
     "upload-audio-anchor": "node upload-episode.js",
     "upload": "npm run download-audio-yt && npm run upload-audio-anchor"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Schrodinger-Hat/youtube-to-anchorfm.git"
   },
   "author": "thejoin",
   "license": "MIT"
