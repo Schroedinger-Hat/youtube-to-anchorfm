@@ -11,7 +11,8 @@
   "scripts": {
     "download-audio-yt": "node download-episode.js",
     "upload-audio-anchor": "node upload-episode.js",
-    "upload": "npm run download-audio-yt && npm run upload-audio-anchor"
+    "upload": "npm run download-audio-yt && npm run upload-audio-anchor",
+    "prepare": "ncc build index.js -o dist --source-map"
   },
   "repository": {
     "type": "git",
