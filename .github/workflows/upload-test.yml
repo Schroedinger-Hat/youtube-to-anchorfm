@@ -1,0 +1,21 @@
+name: '[DEMO] Upload Episode from YouTube To Anchor.Fm'
+
+on:
+  push:
+    paths: 
+      - episode.json
+    branches: [master]
+
+jobs:
+  upload_episode:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Upload Episode from YouTube To Anchor.Fm
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.0.6
+        env:
+          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
+          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
