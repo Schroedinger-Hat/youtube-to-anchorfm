@@ -10,16 +10,16 @@ const pathToEpisodeJSON = 'episode.json';
 const outputFile = 'episode.webm';
 
 console.log('installing dependecies');
-exec('npm i -g youtube-dl && npm i puppeteer', (error, stdout, stderr) => {
+exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && npm i youtube-dl && npm i puppeteer', (error, stdout, stderr) => {
     if (error) {
-        console.log(`error: ${error.message}`)
+        console.log(`error: ${error.message}`);
     }
     if (stderr) {
-        console.log(`stderr: ${stderr}`)
+        console.log(`stderr: ${stderr}`);
     }
-    console.log(`stdout: ${stdout}`)
+    console.log(`stdout: ${stdout}`);
 
-    const youtubedl = require('youtube-dl')
+    const youtubedl = require('youtube-dl');
     const puppeteer = require('puppeteer');
 
     try {
