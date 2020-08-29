@@ -37512,19 +37512,19 @@ const debug = __webpack_require__(7891)('youtube-dl')
 const { readFileSync, existsSync } = __webpack_require__(5747)
 const path = __webpack_require__(5622)
 
-const binPath = __webpack_require__.ab + "bin"
-const detailsPath = __webpack_require__.ab + "details"
+const binPath = path.join(__dirname, '..', 'bin')
+const detailsPath = path.join(binPath, 'details')
 
 module.exports = () => {
-  if (!existsSync(__webpack_require__.ab + "details")) {
+  if (!existsSync(detailsPath)) {
     debug('unable to locate `youtube-dl` at ' + binPath)
   }
 
-  const details = JSON.parse(readFileSync(__webpack_require__.ab + "details"))
+  const details = JSON.parse(readFileSync(detailsPath))
 
   return details.path
     ? details.path
-    : __webpack_require__.ab + "bin/" + details.exec
+    : path.resolve(__dirname, '..', 'bin', details.exec)
 }
 
 
