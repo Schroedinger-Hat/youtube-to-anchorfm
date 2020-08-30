@@ -52,7 +52,7 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
             
                 (async () => {
                     console.log("Launching puppeteer");
-                    const browser = await puppeteer.launch();
+                    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
                     const page = await browser.newPage();
             
                     const navigationPromise = page.waitForNavigation();
