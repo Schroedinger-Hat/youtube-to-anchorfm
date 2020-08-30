@@ -192,8 +192,8 @@ module.exports = JSON.parse("[\"ac\",\"com.ac\",\"edu.ac\",\"gov.ac\",\"net.ac\"
 const { exec } = __webpack_require__(3129);
 const fs = __webpack_require__(5747);
 
-const email = 'x' || 0;
-const password = 'c' || 0;
+const email = process.env.ANCHOR_EMAIL;
+const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
@@ -37512,19 +37512,19 @@ const debug = __webpack_require__(7891)('youtube-dl')
 const { readFileSync, existsSync } = __webpack_require__(5747)
 const path = __webpack_require__(5622)
 
-const binPath = path.join(__dirname, '..', 'bin')
-const detailsPath = path.join(binPath, 'details')
+const binPath = __webpack_require__.ab + "bin"
+const detailsPath = __webpack_require__.ab + "details"
 
 module.exports = () => {
-  if (!existsSync(detailsPath)) {
+  if (!existsSync(__webpack_require__.ab + "details")) {
     debug('unable to locate `youtube-dl` at ' + binPath)
   }
 
-  const details = JSON.parse(readFileSync(detailsPath))
+  const details = JSON.parse(readFileSync(__webpack_require__.ab + "details"))
 
   return details.path
     ? details.path
-    : path.resolve(__dirname, '..', 'bin', details.exec)
+    : __webpack_require__.ab + "bin/" + details.exec
 }
 
 

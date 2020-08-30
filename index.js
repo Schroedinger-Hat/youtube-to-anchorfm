@@ -1,8 +1,8 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
-const email = 'x' || process.env.ANCHOR_EMAIL;
-const password = 'c' || process.env.ANCHOR_PASSWORD;
+const email = process.env.ANCHOR_EMAIL;
+const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
