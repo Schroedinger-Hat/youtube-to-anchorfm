@@ -2,9 +2,13 @@
 
 ![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/master/assets/img/cover.png "Cover image")
 
-You will thank us later, now you should give us a star.
+This action will upload an audio file from a given youtube video automatically to your Anchor.fm account.
 
-Come on... Don't be shy.
+It is very useful in a scenario where you have a YouTube account and also a podcast over Spotify, Anchor.fm, Play Music, iTunes etc.
+
+In our live show (Schrodinger Hat) we had this necessity. So we built it for the open source community.
+
+Every contribution it is appreciated, also a simple feedback.
 
 ## How it works
 
@@ -14,14 +18,23 @@ The first one is a npm module used for donwloading the video / audio from YouTub
 
 The action will start everytime you push a change on the `episode.json` file. Into this file you need to specify the youtube id of your video.
 
+The action use a docker image built over ubuntu 18.04. It take some times to setup the environment (installing dependecies and chromium browser).
+
 ## How can I use it?
 
-We are working on put the action into the Github Actions marketplace.
+You can use the latest version of this action from the Github Actions marketplace.
 
-Meanwhile you can add under the `.github/workflows` directory this yml:
+In your repository root directory you should add a `episode.json` file containing your youtube video id, e.g:
+```
+{
+  "id": "nHCXZC2InAA"
+}
+```
+
+Then you can add under the `.github/workflows` directory this yml:
 
 ```
-name: Upload Episode from YouTube To Anchor.Fm
+name: 'Upload Episode from YouTube To Anchor.Fm'
 
 on:
   push:
@@ -31,28 +44,24 @@ on:
 
 jobs:
   upload_episode:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12"
-      - name: Install And Configure youtube-dl
-        run: |
-          sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-          sudo chmod a+rx /usr/local/bin/youtube-dl
-      - name: Install Deps, donwload audio file from youtube video defined in episode.json and upload to anchor
-        run: |
-          npm install
-          npm run upload
+      - name: Upload Episode from YouTube To Anchor.Fm
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.4
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
 ```
 
-**NOTE**: you need to set up the secrets for ANCHOR_EMAIL and ANCHOR_PASSWORD. This environment variables are mandatory as they specify the signin account.
+**NOTE**: you need to set up the secrets for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
 
 
 # Credits
 
 [@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
+
+
+# License
+
+MIT
