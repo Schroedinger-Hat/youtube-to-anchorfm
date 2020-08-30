@@ -14,8 +14,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - name: Install puppeteer with chromium
+        run: sudo npm i puppeteer --unsafe-perm=true --allow-root && sudo npm i youtube-dl
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.0.9g
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.2b
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
