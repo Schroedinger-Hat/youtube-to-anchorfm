@@ -22,7 +22,7 @@ The action use a docker image built over ubuntu 18.04. It take some times to set
 
 ## How can I use it?
 
-You can use the latest version of this action from the Github Actions marketplace.
+You can use the latest version of this action from the [Github Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
 
 In your repository root directory you should add a `episode.json` file containing your youtube video id, e.g:
 ```
