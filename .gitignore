@@ -4,3 +4,10 @@ package-lock.json
 *.m4a
 *.webm
 dist/episode*
+
+src/input/*
+!src/input/test1
+src/output/*
+!src/output/test1
+
+notes.txt

@@ -1,23 +1,25 @@
 {
-  "name": "yt-to-anchor",
+  "name": "hashnode-to-anchorfm",
   "version": "1.0.0",
-  "description": "",
+  "description": "Transform hasnode posts into voice files and upload them on anchorfm",
   "main": "index.js",
   "dependencies": {
     "puppeteer": "^5.2.1",
-    "youtube-dl": "^3.0.2"
+    "fluent-ffmpeg": "^2.1.2",
+    "gtts": "^0.2.1"
   },
   "devDependencies": {},
   "scripts": {
-    "download-audio-yt": "node download-episode.js",
+    "text-to-voice": "node text-to-voice.js test1 cap1 en",
     "upload-audio-anchor": "node upload-episode.js",
-    "upload": "npm run download-audio-yt && npm run upload-audio-anchor",
+    "upload": "npm run text-to-voice && npm run upload-audio-anchor",
     "prepare": "ncc build index.js -o dist --source-map -e puppeteer"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Schrodinger-Hat/youtube-to-anchorfm.git"
+    "url": "git+https://github.com/W01fw00d/hashnode-to-anchorfm.git"
   },
-  "author": "thejoin",
-  "license": "MIT"
+  "author": "W01fw00d",
+  "license": "MIT",
+  "homepage": "https://github.com/W01fw00d/hashnode-to-anchorfm#readme"
 }

@@ -1,0 +1,17 @@
+This is the chapter title
+
+[EXQUISITE CORPSE TEST 1: This is a book title]
+
+[By Author's Name
+
+This phrase is a narration phrase, so it will be read by the narrator
+
+- This is the first dialogue phrase - said the first person talking
+
+- Then, this is the second dialogue phrase - answered the second person on the conversation - And this is the continuation of that phrase...
+
+- This is the third dialogue phrase
+
+- And this is the fourth and last dialogue phrase
+
+This narration phrase will finish this chapter.

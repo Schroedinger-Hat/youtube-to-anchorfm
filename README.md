@@ -1,67 +1,78 @@
-# Youtube to Anchor.fm - An automation tool to publish your podcast
-
-![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/master/assets/img/cover.png "Cover image")
+# Hasnode to Anchor.fm - An automation tool to publish your podcast
 
 This action will upload an audio file from a given youtube video automatically to your Anchor.fm account.
 
-It is very useful in a scenario where you have a YouTube account and also a podcast over Spotify, Anchor.fm, Play Music, iTunes etc.
-
-In our live show (Schrodinger Hat) we had this necessity. So we built it for the open source community.
-
-Every contribution it is appreciated, also a simple feedback.
-
 ## How it works
-
-The workflow is using `youtube-dl` library and `puppeteer`.
-
-The first one is a npm module used for donwloading the video / audio from YouTube, meanwhile Puppeteer will upload the generated file into the Anchor.fm dashboard (by loggin it).
-
-The action will start everytime you push a change on the `episode.json` file. Into this file you need to specify the youtube id of your video.
-
-The action use a docker image built over ubuntu 18.04. It take some times to setup the environment (installing dependecies and chromium browser).
 
 ## How can I use it?
 
-You can use the latest version of this action from the [Github Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
-
-In your repository root directory you should add a `episode.json` file containing your youtube video id, e.g:
-```
-{
-  "id": "nHCXZC2InAA"
-}
-```
-
-Then you can add under the `.github/workflows` directory this yml:
-
-```
-name: 'Upload Episode from YouTube To Anchor.Fm'
-
-on:
-  push:
-    paths: 
-      - episode.json
-    branches: [master]
-
-jobs:
-  upload_episode:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.5
-        env:
-          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
-          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
-```
-
-**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
-
-
 # Credits
 
-[@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
+[Forked repo](https://github.com/Schrodinger-Hat/youtube-to-anchorfm): [@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
 
+Code for gtts by @W01fw00d from https://github.com/W01fw00d/text-to-voice
+
+Hasnode management by @W01fw00d
 
 # License
 
 MIT
+
+# Transform text doc to voice audio file
+
+| **Main dependencies:**
+
+- [node-gtts](https://www.npmjs.com/package/node-gtts)
+- [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
+
+| **Setup:**
+
+- Install [ffmpeg](http://www.ffmpeg.org/). It's recommended to install full version to be sure to have all needed features
+- `[Windows]` Add `ffmpeg` and `ffprobe` to your `PATH`
+
+- Install dependencies:
+
+```
+npm install
+```
+
+| **How to use:**
+
+- Expected filename structure: `{bookCode}_cap{chapterCode}`. You have an example in `src/input/test1/test1_cap1.txt`
+
+- Add the input text doc in `.txt` format in `src/input/{bookcode}/`
+
+- Add desired `opening.mp3` song in `input/{bookcode}/songs/`. Add the `closure.mp3` song in its own folder too
+
+- Get your files data for command arguments:
+
+A) `bookCode`: The name of the folder for your chosen input file, as well as the desired location for the output file. It's part of the input and output file name too
+
+B) `chapterCode`: Part of the input and output file name
+
+C) `lang`: Desired language for the voices. Supports Spanish (`es`) and English (`en`). Defaults to `es`
+
+D) `shallAddChapterNumber`: Set it to any value for adding a voice line at the beginning mentioning the chapter number. Leave empty for not.
+
+- Create `output/{bookcode}` folder. It will be used to store the output audio file
+
+- Execute task (? args are optional):
+
+```
+node index.js {bookcode} {chapterCode} {?lang} {?shallAddChapterNumber}
+```
+
+- Output `.mp3` audio file will appear on `src/output/{bookcode}`
+
+| **Command executed on ffmpeg:**
+
+The task executes:
+
+```
+ffmpeg -i src/input/test1/songs/opening.mp3 -i src/output/test1/test1_cap1_0_0.mp3 -i src/input/test1/songs/closure.mp3
+-y -filter_complex concat=n=73:v=0:a=1 src/output/test1/test1_cap1.mp3
+```
+
+| **Attribution:**
+
+- `test1` opening and closure songs were created by @W01fw00d
