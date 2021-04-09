@@ -6,7 +6,10 @@ module.exports = (blogCode, postCode, lang) => {
   const combineVoiceFiles = require("./audioFilesCombinator");
 
   const {
+    TXT_EXTENSION,
+    MD_EXTENSION,
     INPUT_FOLDER,
+    BACKUP_FOLDER,
     SONGS_FOLDER,
     OUTPUT_FOLDER,
     AUDIO_EXTENSION,
@@ -15,85 +18,98 @@ module.exports = (blogCode, postCode, lang) => {
   } = require("./constants");
   let VOICES = getVoices(lang);
 
-  const filename = `${blogCode}/${postCode}`;
+  const codeFilename = `${INPUT_FOLDER}/${blogCode}/${postCode}-code.${TXT_EXTENSION}`;
+  readFile(codeFilename, (code) => {
+    const filename = `${BACKUP_FOLDER}/${code}.${MD_EXTENSION}`;
+    readFile(filename, (text) => {
+      console.log(`${filename} read succesfully.`);
 
-  readFile(filename, (text) => {
-    console.log(`${filename} read succesfully.`);
+      const getSongPath = (name) =>
+        `${INPUT_FOLDER}/${blogCode}/${SONGS_FOLDER}/${name}.${AUDIO_EXTENSION}`;
+      const openingSong = getSongPath("opening");
+      const closureSong = getSongPath("closure");
 
-    const getSongPath = (name) =>
-      `${INPUT_FOLDER}/${blogCode}/${SONGS_FOLDER}/${name}.${AUDIO_EXTENSION}`;
-    const openingSong = getSongPath("opening");
-    const closureSong = getSongPath("closure");
+      let segmentsFilenames = [openingSong];
 
-    let segmentsFilenames = [openingSong];
+      let currentVoiceIndex = 0;
+      const formattedTextArray = getTextArrayFormatted(text).reduce(
+        (accumulator, item) => {
+          if (
+            item.trim().length > 0 &&
+            item.substring(0, 2) !== DELIMITERS.GIF
+          ) {
+            let voice = VOICES.NARRATOR;
+            const length = item.length;
+            const firstLetter = item[0];
+            const dialogueStartDelimiter = /(?<= )\-/;
 
-    let currentVoiceIndex = 0;
-    const formattedTextArray = getTextArrayFormatted(text).reduce(
-      (accumulator, item) => {
-        if (item.trim().length > 0 && item.substring(0, 2) !== "%[") {
-          let voice = VOICES.NARRATOR;
-          const length = item.length;
-          const firstLetter = item[0];
-          const dialogueStartDelimiter = /(?<= )\-/;
+            const startsWith = (word) =>
+              length > word.length && item.substring(0, word.length) === word;
 
-          const startsWith = (word) =>
-            length > word.length && item.substring(0, word.length) === word;
+            if (firstLetter === "*" || startsWith(DELIMITERS.TITLE)) {
+              voice = VOICES.INTRO;
+            } else if (
+              firstLetter === "-" ||
+              dialogueStartDelimiter.test(item)
+            ) {
+              voice = VOICES.DIALOGUE[currentVoiceIndex];
+              currentVoiceIndex = currentVoiceIndex === 0 ? 1 : 0;
+            }
 
-          if (firstLetter === "*" || startsWith(DELIMITERS.TITLE)) {
-            voice = VOICES.INTRO;
-          } else if (firstLetter === "-" || dialogueStartDelimiter.test(item)) {
-            voice = VOICES.DIALOGUE[currentVoiceIndex];
-            currentVoiceIndex = currentVoiceIndex === 0 ? 1 : 0;
+            const subSegmentArray = item.split("-");
+
+            subSegmentArray.forEach((subSegmentItem, index) => {
+              if (subSegmentItem.trim().length > 0) {
+                accumulator.push({
+                  text: subSegmentItem,
+                  voice:
+                    subSegmentArray.length === 1 || isOdd(index)
+                      ? voice
+                      : VOICES.NARRATOR,
+                });
+              }
+            });
           }
 
-          const subSegmentArray = item.split("-");
+          return accumulator;
+        },
+        []
+      );
 
-          subSegmentArray.forEach((subSegmentItem, index) => {
-            if (subSegmentItem.trim().length > 0) {
-              accumulator.push({
-                text: subSegmentItem,
-                voice:
-                  subSegmentArray.length === 1 || isOdd(index)
-                    ? voice
-                    : VOICES.NARRATOR,
-              });
-            }
-          });
-        }
+      let formattedTextIndex = 0;
 
-        return accumulator;
-      },
-      []
-    );
+      const iterate = () => {
+        const callback = () => {
+          formattedTextIndex++;
 
-    let formattedTextIndex = 0;
+          if (formattedTextIndex < formattedTextArray.length) {
+            iterate();
+          } else {
+            // End of iteration
+            segmentsFilenames.push(closureSong);
 
-    const iterate = () => {
-      const callback = () => {
-        formattedTextIndex++;
+            combineVoiceFiles(
+              blogCode,
+              segmentsFilenames,
+              `${OUTPUT_FOLDER}/${filename}.${AUDIO_EXTENSION}`
+            );
+          }
+        };
 
-        if (formattedTextIndex < formattedTextArray.length) {
-          iterate();
-        } else {
-          // End of iteration
-          segmentsFilenames.push(closureSong);
+        const segment = formattedTextArray[formattedTextIndex];
+        const segmentFilename = `${filename}_${formattedTextIndex}`;
+        const segmentFilePath = `${OUTPUT_FOLDER}/${segmentFilename}.${AUDIO_EXTENSION}`;
+        segmentsFilenames.push(segmentFilePath);
 
-          combineVoiceFiles(
-            blogCode,
-            segmentsFilenames,
-            `${OUTPUT_FOLDER}/${filename}.${AUDIO_EXTENSION}`
-          );
-        }
+        generateVoiceFile(
+          segment.text,
+          segmentFilePath,
+          segment.voice,
+          callback
+        );
       };
 
-      const segment = formattedTextArray[formattedTextIndex];
-      const segmentFilename = `${filename}_${formattedTextIndex}`;
-      const segmentFilePath = `${OUTPUT_FOLDER}/${segmentFilename}.${AUDIO_EXTENSION}`;
-      segmentsFilenames.push(segmentFilePath);
-
-      generateVoiceFile(segment.text, segmentFilePath, segment.voice, callback);
-    };
-
-    iterate();
+      iterate();
+    });
   });
 };

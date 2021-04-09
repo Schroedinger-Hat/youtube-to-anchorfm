@@ -1,5 +1,6 @@
 const SOURCE_FOLDER = "src";
 const INPUT_FOLDER = SOURCE_FOLDER + "/input";
+const BACKUP_FOLDER = "../thenursewhocoded";
 
 // Spanish compatible
 const SPAIN_SPANISH = "es-es";
@@ -14,11 +15,13 @@ const AUTRALIAN_ENGLISH = "en-au";
 
 module.exports = {
   INPUT_FOLDER,
+  BACKUP_FOLDER,
   OUTPUT_FOLDER: `${SOURCE_FOLDER}/output`,
   SONGS_FOLDER: "songs",
 
   AUDIO_EXTENSION: "mp3",
-  DOC_EXTENSION: "txt",
+  TXT_EXTENSION: "txt",
+  MD_EXTENSION: "md",
   UTF_8: "utf8",
 
   getVoices: (lang) =>
@@ -35,6 +38,7 @@ module.exports = {
       },
     }[lang || "en"]),
   DELIMITERS: {
+    GIF: "%[",
     TITLE: "###",
   },
 };
