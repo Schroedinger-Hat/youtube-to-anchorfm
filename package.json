@@ -1,7 +1,7 @@
 {
   "name": "hashnode-to-anchorfm",
   "version": "1.0.0",
-  "description": "Transform hasnode posts into voice files and upload them on anchorfm",
+  "description": "Transform Hashnode.com posts into voice files and upload them on Anchor.fm",
   "main": "index.js",
   "dependencies": {
     "puppeteer": "^5.2.1",
@@ -10,10 +10,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "text-to-voice": "node text-to-voice.js test1 cap1 en",
+    "text-to-voice": "node text-to-voice.js",
     "upload-audio-anchor": "node upload-episode.js",
-    "upload": "npm run text-to-voice && npm run upload-audio-anchor",
-    "prepare": "ncc build index.js -o dist --source-map -e puppeteer"
+    "upload": "npm run text-to-voice && npm run upload-audio-anchor"
   },
   "repository": {
     "type": "git",

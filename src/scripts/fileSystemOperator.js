@@ -12,6 +12,16 @@ exports.readFile = (filename, callback) => {
   });
 };
 
+exports.readFolder = (path, callback) => {
+  fs.readdir(path, (error, files) => {
+    if (error) {
+      throw new Error(error);
+    }
+
+    callback(files);
+  });
+};
+
 exports.deleteFile = (file) => {
   try {
     fs.unlinkSync(file); //TODO: Create a mock for this script, for dev use
