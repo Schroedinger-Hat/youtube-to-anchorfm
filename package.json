@@ -11,7 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "text-to-voice": "node text-to-voice.js",
-    "upload-audio-anchor": "node upload-episode.js",
+    "upload-anchor": "node upload-episode.js",
     "upload": "npm run text-to-voice && npm run upload-audio-anchor"
   },
   "repository": {

@@ -9,4 +9,6 @@ src/input/*
 src/output/*
 !src/output/test1
 
+secrets/
+
 notes.txt
