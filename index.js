@@ -1,12 +1,20 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
+function GetEnvironmentVar(varname, defaultvalue) {
+    var result = process.env[varname];
+    if (result != undefined)
+        return result;
+    else
+        return defaultvalue;
+}
+
 const email = process.env.ANCHOR_EMAIL;
 const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
-const pathToEpisodeJSON = 'episode.json';
+const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
 const outputFile = 'episode.webm';
 
 console.log('installing dependecies');
