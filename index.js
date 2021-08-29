@@ -1,12 +1,20 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 
+function GetEnvironmentVar(varname, defaultvalue) {
+    var result = process.env[varname];
+    if (result != undefined)
+        return result;
+    else
+        return defaultvalue;
+}
+
 const email = process.env.ANCHOR_EMAIL;
 const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
-const pathToEpisodeJSON = 'episode.json';
+const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
 const outputFile = 'episode.webm';
 
 console.log('installing dependecies');
@@ -62,32 +70,37 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     await page.setViewport({ width: 1600, height: 789 });
             
                     await navigationPromise;
-            
+
+                    console.log("Trying to log in");
                     await page.type('#email', email);
                     await page.type('#password', password);
                     await page.click('button[type=submit]');
                     await navigationPromise;
                     console.log("Logged in");
+
                     await page.waitForSelector('input[type=file]');
-            
+                    console.log("Uploading audio file");
                     const inputFile = await page.$('input[type=file]');
                     await inputFile.uploadFile('episode.webm');
-                    console.log("Uploading audio file");
-                    await page.waitFor(25 * 1000);
+                    
+                    
+                    console.log("Waiting for upload to finish");
+                    await page.waitForTimeout(25 * 1000);
                     await page.waitForFunction('document.querySelector(".styles__saveButton___lWrNZ").getAttribute("disabled") === null', { timeout: UPLOAD_TIMEOUT });
                     await page.click('.styles__saveButton___lWrNZ');
                     await navigationPromise;
-                    console.log("Adding title and description");
+
+
+                    console.log("Adding title");
                     await page.waitForSelector('#title');
                     await page.type('#title', episode.title);
             
-                    await page.click('.styles__modeToggleText___26-xx');
-            
-                    await page.waitForSelector('textarea[name=description]');
-                    await page.type('textarea[name=description]', episode.description);
+                    console.log("Adding description");
+                    await page.waitForSelector('div[role="textbox"]');
+                    await page.type('div[role="textbox"]', episode.description);
 
                     console.log("Publishing");
-                    await page.click('.styles__saveButtonWrapper___TrQYl button');
+                    await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-1v5fotd');
                     await navigationPromise;
             
                     await browser.close()
