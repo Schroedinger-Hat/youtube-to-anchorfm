@@ -46,15 +46,17 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
         youtubedl.getInfo(url, function (err, info) {
             if (err) throw err;
 
-            console.log(`Checking title`);
+            console.log(`-- Checking title`);
             
-            if ( ! Object.prototype.hasOwnProperty.call(epConfJSON, 'title') || isEmpty(epConfJSON.title)  ) {
-                if ( !isEmpty(info.title)  ) {
+            if ( !Object.prototype.hasOwnProperty.call(epConfJSON, 'title') || isEmpty(epConfJSON.title)  ) {
+                if ( isEmpty(info.title)  ) {
+                    epConfJSON.title = 'no title';
+                } else {
                     epConfJSON.title = info.title;
                 }
             }
 
-            console.log(`Checking description`)
+            console.log(`-- Checking description`)
 
             if ( !Object.prototype.hasOwnProperty.call(epConfJSON, 'description') || isEmpty(epConfJSON.description) ) {
 
@@ -83,7 +85,9 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                 fs.writeFileSync(pathToEpisodeJSON, JSON.stringify(epConfJSON));
 
                 const episode = JSON.parse(fs.readFileSync(pathToEpisodeJSON, 'utf-8'));
-            
+                const jsonEpisode = JSON.stringify(episode)
+                console.log(`-- episode.json: ${jsonEpisode}`);
+
                 (async () => {
                     console.log("Launching puppeteer");
                     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
@@ -115,17 +119,17 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     await page.waitForFunction('document.querySelector(".styles__saveButton___lWrNZ").getAttribute("disabled") === null', { timeout: UPLOAD_TIMEOUT });
                     await page.click('.styles__saveButton___lWrNZ');
                     await navigationPromise;
-
-
-                    console.log("Adding title");
-                    await page.waitForSelector('#title');
+                    
+                    console.log("-- Adding title");
+                    await page.waitForSelector('#title', { visible: true });
+                    await page.waitForTimeout(2000);
                     await page.type('#title', episode.title);
-            
-                    console.log("Adding description");
-                    await page.waitForSelector('div[role="textbox"]');
+
+                    console.log("-- Adding description");
+                    await page.waitForSelector('div[role="textbox"]', { visible: true });
                     await page.type('div[role="textbox"]', episode.description);
 
-                    console.log("Publishing");
+                    console.log("-- Publishing");
                     await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-1v5fotd');
                     await navigationPromise;
             
