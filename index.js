@@ -99,8 +99,13 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     await page.waitForSelector('div[role="textbox"]');
                     await page.type('div[role="textbox"]', episode.description);
 
-                    console.log("Publishing");
-                    await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-1v5fotd');
+                    console.log("-- Publishing");
+                    const [button] = await page.$x("//button[contains(., 'Next')]");
+
+                    if (button) {
+                        await button.click();
+                    }
+
                     await navigationPromise;
             
                     await browser.close()
