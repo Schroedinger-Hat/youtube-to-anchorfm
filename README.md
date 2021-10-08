@@ -1,6 +1,6 @@
 # Youtube to Anchor.fm - An automation tool to publish your podcast
 
-![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/master/assets/img/cover.png "Cover image")
+![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png "Cover image")
 
 This action will upload an audio file from a given youtube video automatically to your Anchor.fm account.
 
@@ -40,7 +40,7 @@ on:
   push:
     paths: 
       - episode.json
-    branches: [master]
+    branches: [main]
 
 jobs:
   upload_episode:
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.5
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.6
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
