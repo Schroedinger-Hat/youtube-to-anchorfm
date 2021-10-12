@@ -102,13 +102,17 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     console.log("-- Publishing");
                     const [button] = await page.$x("//button[contains(., 'Next')]");
 
+                    // If no button is found using label, try using css path
                     if (button) {
                         await button.click();
                     }
+                    else {
+                        await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-1v5fotd');
+                    }
 
                     await navigationPromise;
-            
                     await browser.close()
+
                     return new Promise((resolve, reject) => resolve("yay"));
                 })().then(r => console.log(r), v => console.log(v));
             });
@@ -117,7 +121,4 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
     } catch (error) {
         throw error;
     }
-
-
-
 });
