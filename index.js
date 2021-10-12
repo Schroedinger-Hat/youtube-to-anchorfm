@@ -8,7 +8,7 @@ function GetEnvironmentVar(varname, defaultvalue) {
     else
         return defaultvalue;
 }
-
+require('dotenv').config()
 const email = process.env.ANCHOR_EMAIL;
 const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
@@ -18,7 +18,8 @@ const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json
 const outputFile = 'episode.webm';
 
 console.log('installing dependecies');
-exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm i puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
+// exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm i puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
+exec('echo OK', (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
     }
@@ -112,7 +113,7 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                         await button.click();
                     }
                     else {
-                        await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-1v5fotd');
+                        await page.click('.styles__button___2oNPe.styles__purple___2u-0h.css-39f635');
                     }
 
                     await navigationPromise;
