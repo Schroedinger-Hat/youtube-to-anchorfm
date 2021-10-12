@@ -82,21 +82,21 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     console.log("Uploading audio file");
                     const inputFile = await page.$('input[type=file]');
                     await inputFile.uploadFile('episode.webm');
-                    
-                    
+
                     console.log("Waiting for upload to finish");
                     await page.waitForTimeout(25 * 1000);
                     await page.waitForFunction('document.querySelector(".styles__saveButton___lWrNZ").getAttribute("disabled") === null', { timeout: UPLOAD_TIMEOUT });
                     await page.click('.styles__saveButton___lWrNZ');
                     await navigationPromise;
 
-
-                    console.log("Adding title");
-                    await page.waitForSelector('#title');
+                    console.log("-- Adding title");
+                    await page.waitForSelector('#title', { visible: true });
+                    // Wait some time so any field refresh doesn't mess up with our input
+                    await page.waitForTimeout(2000);
                     await page.type('#title', episode.title);
-            
-                    console.log("Adding description");
-                    await page.waitForSelector('div[role="textbox"]');
+
+                    console.log("-- Adding description");
+                    await page.waitForSelector('div[role="textbox"]', { visible: true });
                     await page.type('div[role="textbox"]', episode.description);
 
                     console.log("-- Publishing");
