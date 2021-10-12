@@ -42,6 +42,9 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
             epConfJSON.title = info.title;
             epConfJSON.description = info.description;
 
+            console.log(`title: ${epConfJSON.title}`)
+            console.log(`description: ${epConfJSON.description}`)
+
             const youtubeDlCommand = `youtube-dl -o ${outputFile} -f bestaudio[ext=webm] ${url}`;
 
             exec(youtubeDlCommand, (error, stdout, stderr) => {
@@ -57,18 +60,20 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                 fs.writeFileSync(pathToEpisodeJSON, JSON.stringify(epConfJSON));
 
                 const episode = JSON.parse(fs.readFileSync(pathToEpisodeJSON, 'utf-8'));
-            
+                const jsonEpisode = JSON.stringify(episode)
+                console.log(`-- episode.json: ${jsonEpisode}`);
+
                 (async () => {
                     console.log("Launching puppeteer");
                     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
                     const page = await browser.newPage();
-            
+
                     const navigationPromise = page.waitForNavigation();
-            
+
                     await page.goto('https://anchor.fm/dashboard/episode/new');
-            
+
                     await page.setViewport({ width: 1600, height: 789 });
-            
+
                     await navigationPromise;
 
                     console.log("Trying to log in");
