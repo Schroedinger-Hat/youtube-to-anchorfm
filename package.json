@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "puppeteer": "^5.2.1",
-    "youtube-dl": "^3.0.2"
+    "youtube-dl": "^3.0.2",
+    "dotenv": "10.0.0"
   },
   "devDependencies": {},
   "scripts": {
