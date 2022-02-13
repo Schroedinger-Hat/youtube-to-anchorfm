@@ -25,7 +25,7 @@ The action use a docker image built over ubuntu 18.04. It take some times to set
 You can use the latest version of this action from the [Github Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
 
 In your repository root directory you should add a `episode.json` file containing your youtube video id, e.g:
-```
+```json
 {
   "id": "nHCXZC2InAA"
 }
@@ -33,7 +33,7 @@ In your repository root directory you should add a `episode.json` file containin
 
 Then you can add under the `.github/workflows` directory this yml:
 
-```
+```yaml
 name: 'Upload Episode from YouTube To Anchor.Fm'
 
 on:
