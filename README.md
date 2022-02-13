@@ -57,6 +57,29 @@ jobs:
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
 
+## Draft Mode
+
+By setting the `SAVE_AS_DRAFT`, the new episode will be published as a draft. This can be useful if you need someone else's
+approval before actual publication.
+
+```yaml
+env:
+   SAVE_AS_DRAFT: true
+```
+
+## Audio conversion options
+
+ffmpeg is used to convert the video do MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
+variable.
+
+See `-postprocessor-args` syntax and options on https://github.com/yt-dlp/yt-dlp#post-processing-options.
+
+The example below convert the video to mono audio.
+
+```yaml
+env:
+   POSTPROCESSOR_ARGS: "ffmpeg:-ac 1"
+```
 
 # Credits
 

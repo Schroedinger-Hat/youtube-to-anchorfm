@@ -9,9 +9,13 @@ RUN apt-get install --reinstall libgtk2.0-0 -y
 RUN apt-get install -y libgbm-dev
 RUN apt-get install libnss3 libnss3-tools libxss1 libgtk-3-0 -y
 RUN apt-get install chromium-browser -y
+# To allow MP3 conversion
+RUN apt-get install ffmpeg -y
 
 COPY index.js /index.js
 COPY episode.json /episode.json
+# used by nmp ci
+COPY package-lock.json /package-lock.json
 COPY package.json /package.json
 COPY entrypoint.sh /entrypoint.sh
 
