@@ -15,10 +15,19 @@ const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const YT_URL = 'https://www.youtube.com/watch?v=';
 const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
-const outputFile = 'episode.webm';
+const outputFile = 'episode.mp3';
+
+// Just save as draft, to allow approval flow.
+const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
+const actionText = draftMode == 'true' ? 'Save as draft' : 'Publish now'
+
+// Allow fine tunning of the converted audio file
+// Example: "ffmpeg:-ac 1" for mono mp3
+const postprocessorArgs = GetEnvironmentVar('POSTPROCESSOR_ARGS', "")
+const postprocessorArgsCmd = postprocessorArgs == ""? "": `--postprocessor-args="${postprocessorArgs}"`
 
 console.log('installing dependecies');
-exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm i puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
+exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm i puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
     }
@@ -45,7 +54,8 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
             console.log(`title: ${epConfJSON.title}`)
             console.log(`description: ${epConfJSON.description}`)
 
-            const youtubeDlCommand = `youtube-dl -o ${outputFile} -f bestaudio[ext=webm] ${url}`;
+            const youtubeDlCommand = `youtube-dl -o ${outputFile} -f bestaudio -x --force-overwrites --audio-format mp3 ${postprocessorArgsCmd} ${url}`;
+            console.log(`Download command: ${youtubeDlCommand}`)
 
             exec(youtubeDlCommand, (error, stdout, stderr) => {
                 if (error) {
@@ -86,12 +96,13 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     await page.waitForSelector('input[type=file]');
                     console.log("Uploading audio file");
                     const inputFile = await page.$('input[type=file]');
-                    await inputFile.uploadFile('episode.webm');
+                    await inputFile.uploadFile(outputFile);
 
                     console.log("Waiting for upload to finish");
                     await page.waitForTimeout(25 * 1000);
-                    await page.waitForFunction('document.querySelector(".styles__saveButton___lWrNZ").getAttribute("disabled") === null', { timeout: UPLOAD_TIMEOUT });
-                    await page.click('.styles__saveButton___lWrNZ');
+                    await page.waitForXPath('//button[text()="Save episode" and not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
+                    const [saveButton] = await page.$x('//button[text()="Save episode" and not(boolean(@disabled))]');
+                    await saveButton.click();
                     await navigationPromise;
 
                     console.log("-- Adding title");
@@ -105,7 +116,7 @@ exec('sudo curl -k -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/loca
                     await page.type('div[role="textbox"]', episode.description);
 
                     console.log("-- Publishing");
-                    const [button] = await page.$x("//button[contains(., 'Next')]");
+                    const [button] = await page.$x(`//button[text()="${actionText}"]`);
 
                     // If no button is found using label, try using css path
                     if (button) {
