@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
 const fs = require('fs');
 
 function GetEnvironmentVar(varname, defaultvalue) {
@@ -13,6 +13,7 @@ const email = process.env.ANCHOR_EMAIL;
 const password = process.env.ANCHOR_PASSWORD;
 const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
+const THUMBNAIL_FORMAT = "jpg";
 const YT_URL = 'https://www.youtube.com/watch?v=';
 const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
 const outputFile = 'episode.mp3';
@@ -48,6 +49,8 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
         const YT_ID = epConfJSON.id;
         console.log(`Processing: ${YT_ID}`);
         const url = YT_URL + YT_ID;
+        const thumbnailOutputFileTemplate = `thumbnail.%(ext)s`
+        const thumbnailOutputFile = `thumbnail.${THUMBNAIL_FORMAT}`
 
         youtubedl.getInfo(url, function (err, info) {
             if (err) throw err;
@@ -56,6 +59,11 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
 
             console.log(`title: ${epConfJSON.title}`)
             console.log(`description: ${epConfJSON.description}`)
+
+            const youtubeDlThumbnailCommand = `youtube-dl -o "${thumbnailOutputFileTemplate}" --skip-download --write-thumbnail --convert-thumbnails ${THUMBNAIL_FORMAT} ${url}`
+            console.log(`Thumbnail download command: ${youtubeDlThumbnailCommand}`)
+            const thumbnailDownloadStdout = execSync(youtubeDlThumbnailCommand)
+            console.log(`stdout: ${thumbnailDownloadStdout}`)
 
             const youtubeDlCommand = `youtube-dl -o ${outputFile} -f bestaudio -x --force-overwrites --audio-format mp3 ${postprocessorArgsCmd} ${url}`;
             console.log(`Download command: ${youtubeDlCommand}`)
@@ -122,6 +130,17 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                     await page.waitForSelector(selectorForExplicitContentLabel, { visible: true})
                     const contentTypeLabel = await page.$(selectorForExplicitContentLabel)
                     await contentTypeLabel.click()
+
+                    console.log("-- Uploading episode art")
+                    await page.waitForSelector('input[type=file][accept="image/*"]');
+                    const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
+                    await inputEpisodeArt.uploadFile(thumbnailOutputFile);
+
+                    console.log("-- Saving uploaded episode art")
+                    await page.waitForXPath('//button/div[text()="Save"]')
+                    const [saveEpisodeArtButton] = await page.$x('//button/div[text()="Save"]')
+                    await saveEpisodeArtButton.click()
+                    await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: UPLOAD_TIMEOUT})
 
                     console.log("-- Publishing");
                     const [button] = await page.$x(`//button[text()="${actionText}"]`);
