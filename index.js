@@ -21,6 +21,9 @@ const outputFile = 'episode.mp3';
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
 const actionText = draftMode == 'true' ? 'Save as draft' : 'Publish now'
 
+const isExplicit = GetEnvironmentVar('IS_EXPLICIT', 'false')
+const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
+
 // Allow fine tunning of the converted audio file
 // Example: "ffmpeg:-ac 1" for mono mp3
 const postprocessorArgs = GetEnvironmentVar('POSTPROCESSOR_ARGS', "")
@@ -114,6 +117,11 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                     console.log("-- Adding description");
                     await page.waitForSelector('div[role="textbox"]', { visible: true });
                     await page.type('div[role="textbox"]', episode.description);
+
+                    console.log("-- Selecting content type")
+                    await page.waitForSelector(selectorForExplicitContentLabel, { visible: true})
+                    const contentTypeLabel = await page.$(selectorForExplicitContentLabel)
+                    await contentTypeLabel.click()
 
                     console.log("-- Publishing");
                     const [button] = await page.$x(`//button[text()="${actionText}"]`);
