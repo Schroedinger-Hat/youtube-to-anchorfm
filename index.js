@@ -18,9 +18,8 @@ const YT_URL = 'https://www.youtube.com/watch?v=';
 const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
 const outputFile = 'episode.mp3';
 
-// Just save as draft, to allow approval flow.
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
-const actionText = draftMode == 'true' ? 'Save as draft' : 'Publish now'
+const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
 
 const isExplicit = GetEnvironmentVar('IS_EXPLICIT', 'false')
 const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
@@ -143,7 +142,7 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                     await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: UPLOAD_TIMEOUT})
 
                     console.log("-- Publishing");
-                    const [button] = await page.$x(`//button[text()="${actionText}"]`);
+                    const [button] = await page.$x(saveDraftOrPublishButtonXPath);
 
                     // If no button is found using label, try using css path
                     if (button) {
