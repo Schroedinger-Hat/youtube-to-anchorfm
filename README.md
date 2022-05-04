@@ -69,7 +69,7 @@ env:
 
 ## Audio conversion options
 
-ffmpeg is used to convert the video do MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
+ffmpeg is used to convert the video to MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
 variable.
 
 See `-postprocessor-args` syntax and options on https://github.com/yt-dlp/yt-dlp#post-processing-options.
