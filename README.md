@@ -81,6 +81,9 @@ env:
    POSTPROCESSOR_ARGS: "ffmpeg:-ac 1"
 ```
 
+# Testing
+This project is a version released project. The github action therefore points to the latest version that is in a known working state.
+To test the latest updates it is neccecary to change the yml file to `uses: Schrodinger-Hat/youtube-to-anchorfm@main`
 # Credits
 
 [@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
