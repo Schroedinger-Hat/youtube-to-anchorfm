@@ -57,6 +57,27 @@ jobs:
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
 
+## Process a YouTube playlist
+
+Right now, you can process a full playlist (one way only) with
+
+```
+curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
+    | jq '.[].contentDetails.videoId' -r \
+    | tac \
+    | xargs -I% bash -c "jo id='%' > episode.json && git commit -am % && git push"
+```
+
+`https://scc-youtube.vercel.app/playlist-items` is from https://github.com/ThatGuySam/youtube-json-server
+
+`jo` is a json generator https://github.com/jpmens/jo
+
+`tac` is a command present in most linuxes and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on youtube.
+
+`jq` is a json processor https://stedolan.github.io/jq/
+
+This must be run on the folder where your episode.json is.
+
 ## Draft Mode
 
 By setting the `SAVE_AS_DRAFT`, the new episode will be published as a draft. This can be useful if you need someone else's
