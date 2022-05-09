@@ -21,6 +21,8 @@ const outputFile = 'episode.mp3';
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
 const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
 
+const thumbnailMode = GetEnvironmentVar('LOAD_THUMBNAIL', 'false')
+
 const isExplicit = GetEnvironmentVar('IS_EXPLICIT', 'false')
 const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
 
@@ -130,16 +132,18 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                     const contentTypeLabel = await page.$(selectorForExplicitContentLabel)
                     await contentTypeLabel.click()
 
-                    console.log("-- Uploading episode art")
-                    await page.waitForSelector('input[type=file][accept="image/*"]');
-                    const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
-                    await inputEpisodeArt.uploadFile(thumbnailOutputFile);
+                    if (thumbnailMode !== 'false') {
+                        console.log("-- Uploading episode art")
+                        await page.waitForSelector('input[type=file][accept="image/*"]');
+                        const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
+                        await inputEpisodeArt.uploadFile(thumbnailOutputFile);
 
-                    console.log("-- Saving uploaded episode art")
-                    await page.waitForXPath('//button/div[text()="Save"]')
-                    const [saveEpisodeArtButton] = await page.$x('//button/div[text()="Save"]')
-                    await saveEpisodeArtButton.click()
-                    await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: UPLOAD_TIMEOUT})
+                        console.log("-- Saving uploaded episode art")
+                        await page.waitForXPath('//button/div[text()="Save"]')
+                        const [saveEpisodeArtButton] = await page.$x('//button/div[text()="Save"]')
+                        await saveEpisodeArtButton.click()
+                        await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: UPLOAD_TIMEOUT})
+                    }
 
                     console.log("-- Publishing");
                     const [button] = await page.$x(saveDraftOrPublishButtonXPath);
