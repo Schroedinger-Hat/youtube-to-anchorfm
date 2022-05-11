@@ -81,9 +81,17 @@ env:
    POSTPROCESSOR_ARGS: "ffmpeg:-ac 1"
 ```
 
+## Explicit Mode
+
+By setting the `IS_EXPLICIT`, the new episode will be marked as explicit.
+```yaml
+env:
+   IS_EXPLICIT: true
+```
+
 ## Thumbnail Mode
 
-By seting the `LOAD_THUMBNAIL`, the new episode will include the video thumbnail as the episode art.
+By setting the `LOAD_THUMBNAIL`, the new episode will include the video thumbnail as the episode art.
 ```yaml
 env:
    LOAD_THUMBNAIL: true
