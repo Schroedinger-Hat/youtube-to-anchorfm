@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v0.1.8
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v1.0.1
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
@@ -56,6 +56,27 @@ jobs:
 ```
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
+
+## Process a YouTube playlist
+
+Right now, you can process a full playlist (one way only) with
+
+```
+curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
+    | jq '.[].contentDetails.videoId' -r \
+    | tac \
+    | xargs -I% bash -c "jo id='%' > episode.json && git commit -am % && git push"
+```
+
+`https://scc-youtube.vercel.app/playlist-items` is from https://github.com/ThatGuySam/youtube-json-server
+
+`jo` is a json generator https://github.com/jpmens/jo
+
+`tac` is a command present in most linuxes and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on youtube.
+
+`jq` is a json processor https://stedolan.github.io/jq/
+
+This must be run on the folder where your episode.json is.
 
 ## Draft Mode
 
@@ -69,7 +90,7 @@ env:
 
 ## Audio conversion options
 
-ffmpeg is used to convert the video do MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
+ffmpeg is used to convert the video to MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
 variable.
 
 See `-postprocessor-args` syntax and options on https://github.com/yt-dlp/yt-dlp#post-processing-options.
