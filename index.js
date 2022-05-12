@@ -112,8 +112,9 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
 
                     console.log("Waiting for upload to finish");
                     await page.waitForTimeout(25 * 1000);
-                    await page.waitForXPath('//button[text()="Save episode" and not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
-                    const [saveButton] = await page.$x('//button[text()="Save episode" and not(boolean(@disabled))]');
+
+                    await page.waitForXPath('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
+                    const [saveButton] = await page.$x('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]');
                     await saveButton.click();
                     await navigationPromise;
 
