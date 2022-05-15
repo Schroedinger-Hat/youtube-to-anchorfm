@@ -118,6 +118,17 @@ env:
    LOAD_THUMBNAIL: true
 ```
 
+## Add YouTube URL to Podcast Description
+
+By setting the `URL_IN_DESCRIPTION`, the Podcast description will include the YouTube URL on a new line at the end of the description.
+It is recommended to set it, for if the YouTube video has no description it will fail to save the new episode. Setting it to true guarantees to always have a description.
+
+```yaml
+env:
+   URL_IN_DESCRIPTION: true
+```
+
+
 # Credits
 
 [@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
