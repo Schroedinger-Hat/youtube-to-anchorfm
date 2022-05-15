@@ -1,8 +1,8 @@
-# Youtube to Anchor.fm - An automation tool to publish your podcast
+# YouTube to Anchor.fm - An automation tool to publish your podcast
 
 ![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png "Cover image")
 
-This action will upload an audio file from a given youtube video automatically to your Anchor.fm account.
+This action will upload an audio file from a given YouTube video automatically to your Anchor.fm account.
 
 It is very useful in a scenario where you have a YouTube account and also a podcast over Spotify, Anchor.fm, Play Music, iTunes etc.
 
@@ -14,17 +14,17 @@ Every contribution it is appreciated, also a simple feedback.
 
 The workflow is using `youtube-dl` library and `puppeteer`.
 
-The first one is a npm module used for donwloading the video / audio from YouTube, meanwhile Puppeteer will upload the generated file into the Anchor.fm dashboard (by loggin it).
+The first one is a npm module used for downloading the video / audio from YouTube, meanwhile Puppeteer will upload the generated file into the Anchor.fm dashboard (by logging it).
 
-The action will start everytime you push a change on the `episode.json` file. Into this file you need to specify the youtube id of your video.
+The action will start every time you push a change on the `episode.json` file. Into this file you need to specify the YouTube id of your video.
 
-The action use a docker image built over ubuntu 18.04. It take some times to setup the environment (installing dependecies and chromium browser).
+The action use a docker image built over ubuntu 18.04. It take some times to setup the environment (installing dependencies and chromium browser).
 
 ## How can I use it?
 
-You can use the latest version of this action from the [Github Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
+You can use the latest version of this action from the [GitHub Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
 
-In your repository root directory you should add a `episode.json` file containing your youtube video id, e.g:
+In your repository root directory you should add a `episode.json` file containing your YouTube video id, e.g:
 ```json
 {
   "id": "nHCXZC2InAA"
@@ -55,7 +55,7 @@ jobs:
           EPISODE_PATH: /github/workspace
 ```
 
-**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the signin account.
+**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the sign in account.
 
 ## Process a YouTube playlist
 
@@ -72,7 +72,7 @@ curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3A
 
 `jo` is a json generator https://github.com/jpmens/jo
 
-`tac` is a command present in most linuxes and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on youtube.
+`tac` is a command present in most linux's and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
 
 `jq` is a json processor https://stedolan.github.io/jq/
 
@@ -90,7 +90,7 @@ env:
 
 ## Audio conversion options
 
-ffmpeg is used to convert the video to MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` enviroment
+ffmpeg is used to convert the video to MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` environment
 variable.
 
 See `-postprocessor-args` syntax and options on https://github.com/yt-dlp/yt-dlp#post-processing-options.
