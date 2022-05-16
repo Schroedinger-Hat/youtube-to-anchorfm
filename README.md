@@ -72,7 +72,7 @@ curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3A
 
 `jo` is a json generator https://github.com/jpmens/jo
 
-`tac` is a command present in most linux's and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
+`tac` is a command present in most linux distributions and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
 
 `jq` is a json processor https://stedolan.github.io/jq/
 
