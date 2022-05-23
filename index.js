@@ -29,6 +29,9 @@ const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podca
 const postprocessorArgs = GetEnvironmentVar('POSTPROCESSOR_ARGS', "")
 const postprocessorArgsCmd = postprocessorArgs == ""? "": `--postprocessor-args="${postprocessorArgs}"`
 
+// maxBuffer in specified in bytes
+const execOptions = {maxBuffer: 5 * 1024}
+
 console.log('installing dependecies');
 exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && sudo chmod a+rx /usr/local/bin/youtube-dl && sudo npm i puppeteer --unsafe-perm=true --allow-root', (error, stdout, stderr) => {
     if (error) {
@@ -61,7 +64,7 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
 
             const youtubeDlThumbnailCommand = `youtube-dl -o "${thumbnailOutputFileTemplate}" --skip-download --write-thumbnail --convert-thumbnails ${THUMBNAIL_FORMAT} ${url}`
             console.log(`Thumbnail download command: ${youtubeDlThumbnailCommand}`)
-            const thumbnailDownloadStdout = execSync(youtubeDlThumbnailCommand)
+            const thumbnailDownloadStdout = execSync(youtubeDlThumbnailCommand, execOptions)
             console.log(`stdout: ${thumbnailDownloadStdout}`)
 
             const youtubeDlCommand = `youtube-dl -o ${outputFile} -f bestaudio -x --force-overwrites --audio-format mp3 ${postprocessorArgsCmd} ${url}`;
@@ -157,10 +160,10 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
 
                     return new Promise((resolve, reject) => resolve("yay"));
                 })().then(r => console.log(r), v => console.log(v));
-            });
+            }, execOptions);
         });
 
     } catch (error) {
         throw error;
     }
-});
+}, execOptions);
