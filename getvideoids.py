@@ -4,13 +4,15 @@ import os
 URL = os.getenv('URL')
 URL = 'https://www.youtube.com/c/DailyDoseComedy100'
 
-if '/c/' in URL or '/channel/' in URL:
+if not os.path.exists('./videos'):
+    os.makedirs('videos')
+if '/video/' in URL:
     videoid=URL.split('/')[-1]
     data={'id':videoid}
     json_obj = json.dumps(data)
     with open('./videos/'+videoid+"episode.json", "w") as file:
         file.write(json_obj)    
-else:
+elif '/c/' in URL or '/channel/' in URL:
     channelid=URL.replace('https://youtube.com/channel/','')
     if channelid.endswith('/'):
         channelid=channelid.replace('/','')
@@ -35,9 +37,8 @@ else:
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(URL, download=False)
 
-    data=[]
     for entry in info['entries']:
-        data.append({'id':entry['id']})
+        data={'id':entry['id']}
         json_obj = json.dumps(data)
         with open('./videos/'+entry['id']+"episode.json", "w") as file:
             file.write(json_obj)
