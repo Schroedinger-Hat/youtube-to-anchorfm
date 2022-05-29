@@ -1,0 +1,45 @@
+name: '[DEMO] Upload whole youtube channel  To Anchor.Fm'
+
+on:
+  # push:
+    # paths: 
+      # - episode.json
+    # branches: [main]
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'YouTube Channel URL'
+        type: enviroment
+        required: False
+      video:
+        description: 'YouTube video URL'
+        type: enviroment
+        required: False        
+jobs:
+  upload_episode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install all necessary packages
+        run: pip install  yt_dlp
+      - name: Run the ids script
+        run: python getvideoids.py      
+        env:
+          URL: ${{ github.event.inputs.channel }}          
+          videoURL: ${{ github.event.inputs.video }}          
+      - name: Upload Episode from YouTube To Anchor.Fm
+        uses: Schrodinger-Hat/youtube-to-anchorfm@V1.0.3
+        env:
+          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
+          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
+          EPISODE_PATH: /github/workspace
+          URL_IN_DESCRIPTION: true
+          SAVE_AS_DRAFT: False
+          LOAD_THUMBNAIL: true
+          videoorchannel: 'channel'
+          playlisturl: ''
+          channelurl: ${{ github.event.inputs.channel }}       
