@@ -11,6 +11,14 @@ on:
         description: 'YouTube Channel or video URL'
         type: enviroment
         required: True   
+      ANCHOR_EMAIL:
+        description: 'ANCHOR_EMAIL'
+        type: enviroment
+        required: True   
+      ANCHOR_PASSWORD:
+        description: 'ANCHOR_PASSWORD'
+        type: enviroment
+        required: True   
 jobs:
   upload_episode:
     runs-on: ubuntu-latest
@@ -29,8 +37,8 @@ jobs:
       - name: Upload Episode from YouTube To Anchor.Fm
         uses: Schrodinger-Hat/youtube-to-anchorfm@V1.0.3
         env:
-          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
-          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
+          ANCHOR_EMAIL: ${{ github.event.inputs.ANCHOR_EMAIL }}     
+          ANCHOR_PASSWORD: ${{ github.event.inputs.ANCHOR_PASSWORD }} 
           EPISODE_PATH: /github/workspace/videos
           URL_IN_DESCRIPTION: true
           SAVE_AS_DRAFT: False
