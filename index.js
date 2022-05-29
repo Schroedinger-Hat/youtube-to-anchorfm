@@ -15,16 +15,14 @@ const UPLOAD_TIMEOUT = process.env.UPLOAD_TIMEOUT || 60 * 5 * 1000;
 
 const THUMBNAIL_FORMAT = "jpg";
 const YT_URL = 'https://www.youtube.com/watch?v=';
-const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json';
+const pathToEpisodeJSONdir = GetEnvironmentVar('EPISODE_PATH','.') ;
 
 const outputFile = 'episode.mp3';
 
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
-const videoorchannel = GetEnvironmentVar('videoorchannel', 'video')
-const channelurl = GetEnvironmentVar('channelurl', '')
-const playlisturl = GetEnvironmentVar('playlisturl', '')
+const url = GetEnvironmentVar('URL', '')
 
-const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
+const saveDraftOrPublishButtonXPath = draftMode == 'False' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
 
 const thumbnailMode = GetEnvironmentVar('LOAD_THUMBNAIL', 'false')
 
@@ -52,15 +50,14 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
     const puppeteer = require('puppeteer');
     let YT_IDs=[];
     try {
-        if (videoorchannel=='video'){
+        if(url.includes('/video/')){
             const epConfJSON = JSON.parse(fs.readFileSync(pathToEpisodeJSON, 'utf-8'));
 
             const YT_ID = epConfJSON.id;
             YT_IDs.push(YT_ID)}
-        else{
-            const channelid=channelurl
+        else if (url.includes('/c/') || url.includes('/channel/')){
+            const channelid=url.split('/')[-1]
 
-            // dir path that contains all your json file
             const dirPath = './videos/';
 
             const files = fs.readdirSync(dirPath);
@@ -70,6 +67,7 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                 const epConfJSON = JSON.parse(fs.readFileSync(path.join(dirPath, val), 'utf8'));
                 const YT_ID = epConfJSON.id;
                 const url = YT_URL + YT_ID;
+                const pathToEpisodeJSON=pathToEpisodeJSONdir+YT_ID +'/episode.json'                
                 const thumbnailOutputFileTemplate = `thumbnail.%(ext)s`
                 const thumbnailOutputFile = `thumbnail.${THUMBNAIL_FORMAT}`
 

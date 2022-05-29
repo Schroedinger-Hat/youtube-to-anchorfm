@@ -1,7 +1,7 @@
 # YouTube  channel  sync to Anchor.fm - An automation tool to publish your podcast
 
 
-https://www.youtube.com/c/DailyDoseComedy100/about
+https://www.youtube.com/c/DailyDoseComedy100
 
 
 

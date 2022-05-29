@@ -1,11 +1,11 @@
 import json
 import yt_dlp
 import os
-URL = 'https://youtube.com/channel/UCBSQxFi6a8Ju2v_hgiM78Ew'
 URL = os.getenv('URL')
-videoURL=os.getenv('videoURL')
-if videoURL:
-    videoid=videoURL.split('/')[-1]
+URL = 'https://www.youtube.com/c/DailyDoseComedy100'
+
+if '/c/' in URL or '/channel/' in URL:
+    videoid=URL.split('/')[-1]
     data={'id':videoid}
     json_obj = json.dumps(data)
     with open('./videos/'+videoid+"episode.json", "w") as file:
@@ -18,7 +18,7 @@ else:
     ydl_opts = {
             # 'outtmpl': videopath+'/%(title)s'+'.mp4',
             'format': 'best',
-            # 'proxy': 'socks5://127.0.0.1:1080',
+            'proxy': 'socks5://127.0.0.1:1080',
             # 'writesubtitles': 'true',
             # 'subtitleslangs': 'en', 
             # 'postprocessors': [{ # Embed metadata in video using ffmpeg. 'key': 'FFmpegMetadata', 'add_metadata': True, }, { # Embed thumbnail in file 'key': 'EmbedThumbnail', 'already_have_thumbnail': False, }

@@ -8,13 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       channel:
-        description: 'YouTube Channel URL'
+        description: 'YouTube Channel or video URL'
         type: enviroment
-        required: False
-      video:
-        description: 'YouTube video URL'
-        type: enviroment
-        required: False        
+        required: True   
 jobs:
   upload_episode:
     runs-on: ubuntu-latest
@@ -30,16 +26,15 @@ jobs:
         run: python getvideoids.py      
         env:
           URL: ${{ github.event.inputs.channel }}          
-          videoURL: ${{ github.event.inputs.video }}          
       - name: Upload Episode from YouTube To Anchor.Fm
         uses: Schrodinger-Hat/youtube-to-anchorfm@V1.0.3
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
-          EPISODE_PATH: /github/workspace
+          EPISODE_PATH: /github/workspace/videos
           URL_IN_DESCRIPTION: true
           SAVE_AS_DRAFT: False
           LOAD_THUMBNAIL: true
           videoorchannel: 'channel'
           playlisturl: ''
-          channelurl: ${{ github.event.inputs.channel }}       
+          URL: ${{ github.event.inputs.channel }}       
