@@ -1,4 +1,10 @@
-# YouTube to Anchor.fm - An automation tool to publish your podcast
+# YouTube  channel  sync to Anchor.fm - An automation tool to publish your podcast
+
+
+https://www.youtube.com/c/DailyDoseComedy100/about
+
+
+
 
 ![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png "Cover image")
 
