@@ -1,9 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt-get update && apt-get install -y sudo
 RUN apt-get -y upgrade
 RUN apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+RUN apt-get install -y python
 RUN apt-get install -y nodejs
 RUN apt-get install --reinstall libgtk2.0-0 -y
 RUN apt-get install -y libgbm-dev
