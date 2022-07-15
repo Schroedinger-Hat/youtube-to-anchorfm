@@ -26,6 +26,8 @@ const thumbnailMode = GetEnvironmentVar('LOAD_THUMBNAIL', 'false')
 const isExplicit = GetEnvironmentVar('IS_EXPLICIT', 'false')
 const selectorForExplicitContentLabel = isExplicit == 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
 
+const urlDescription = GetEnvironmentVar('URL_IN_DESCRIPTION', 'false')
+
 // Allow fine tunning of the converted audio file
 // Example: "ffmpeg:-ac 1" for mono mp3
 const postprocessorArgs = GetEnvironmentVar('POSTPROCESSOR_ARGS', "")
@@ -59,7 +61,8 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
         youtubedl.getInfo(url, function (err, info) {
             if (err) throw err;
             epConfJSON.title = info.title;
-            epConfJSON.description = info.description;
+            epConfJSON.description = urlDescription !== 'false' ? info.description + '\n' + url : info.description;
+
 
             console.log(`title: ${epConfJSON.title}`)
             console.log(`description: ${epConfJSON.description}`)
@@ -115,6 +118,7 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
 
                     console.log("Waiting for upload to finish");
                     await page.waitForTimeout(25 * 1000);
+
                     await page.waitForXPath('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]', { timeout: UPLOAD_TIMEOUT });
                     const [saveButton] = await page.$x('//div[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]');
                     await saveButton.click();
