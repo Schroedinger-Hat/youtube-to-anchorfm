@@ -14,7 +14,7 @@ Here
 Steps to reproduce the behavior:
 1.  '...'
 2.  '....'
-3.  screenshot here
+3.  Screenshot here
 
 
 **Additional notes**
