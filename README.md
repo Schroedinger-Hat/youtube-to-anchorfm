@@ -58,7 +58,9 @@ jobs:
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the sign in account.
 
 ## Process a YouTube playlist
-⚠ WARNING: This Potentialy violate GiHub's Terms of service ⚠
+
+⚠ WARNING: This Potentialy violates GiHub's Terms of service ⚠
+
 > In particular, any repositories that use GitHub Actions or similar 3rd party services solely to interact with 3rd party websites, to engage in incentivized activities, or for general computing purposes may fall foul of the [GitHub Additional Product Terms (Actions)](https://docs.github.com/github/site-policy/github-terms-for-additional-products-and-features#actions), or the [GitHub Acceptable Use Policies](https://docs.github.com/github/site-policy/github-acceptable-use-policies).
 > Actions should not be used for any activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
 
