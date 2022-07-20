@@ -113,6 +113,10 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                     const inputFile = await page.$('input[type=file]');
                     await inputFile.uploadFile(outputFile);
 
+                    await page.waitForXPath('//button[text()="Audio episode"]');
+                    const [audioEpisodeButton] = await page.$x('//button[text()="Audio episode"]');
+                    await audioEpisodeButton.click();
+
                     console.log("Waiting for upload to finish");
                     await page.waitForTimeout(25 * 1000);
 
