@@ -1,0 +1,16 @@
+{
+  "name": "youtube-to-anchorfm",
+  "version": "1.0.0",
+  "description": "Github action and general-purpose tool to publish youtube video as anchorfm episode",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "anchorfm",
+    "youtube"
+  ],
+  "author": "matevskial",
+  "license": "MIT"
+}
