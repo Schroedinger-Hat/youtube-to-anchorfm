@@ -147,8 +147,9 @@ exec('sudo curl -k -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/
                         await inputEpisodeArt.uploadFile(thumbnailOutputFile);
 
                         console.log("-- Saving uploaded episode art")
-                        await page.waitForXPath('//button/div[text()="Save"]')
-                        const [saveEpisodeArtButton] = await page.$x('//button/div[text()="Save"]')
+                        const saveThumbnailButtonSelector = '//span[text()="Save"]/parent::button';
+                        await page.waitForXPath(saveThumbnailButtonSelector)
+                        const [saveEpisodeArtButton] = await page.$x(saveThumbnailButtonSelector)
                         await saveEpisodeArtButton.click()
                         await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: UPLOAD_TIMEOUT})
                     }
