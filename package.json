@@ -12,5 +12,9 @@
     "youtube"
   ],
   "author": "matevskial",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "16.0.1",
+    "youtube-dl-exec": "2.1.5"
+  }
 }
