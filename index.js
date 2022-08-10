@@ -19,7 +19,7 @@ const pathToEpisodeJSON = GetEnvironmentVar('EPISODE_PATH','.') + '/episode.json
 const outputFile = 'episode.mp3';
 
 const draftMode = GetEnvironmentVar('SAVE_AS_DRAFT', 'false')
-const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//button/div[text()="Publish now"]'
+const saveDraftOrPublishButtonXPath = draftMode == 'true' ? '//button[text()="Save as draft"]' : '//span[text()="Publish now"]/parent::button'
 
 const thumbnailMode = GetEnvironmentVar('LOAD_THUMBNAIL', 'false')
 
