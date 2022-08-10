@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const env = require('./environment-variables');
 const youtube = require('./youtube-yt-dlp');
+const anchorfm = require('./anchorfm-pupeteer');
 
 function getYoutubeVideoId() {
     return JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8')).id
@@ -18,6 +19,9 @@ async function main() {
 
     console.log("Downloading audio")
     await youtube.downloadAudio(youtubeVideoId);
+
+    console.log("Posting episode to anchorfm");
+    await anchorfm.postEpisode(youtubeVideoInfo);
 }
 
 main()
