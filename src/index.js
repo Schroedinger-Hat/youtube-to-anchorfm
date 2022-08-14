@@ -4,8 +4,20 @@ const env = require('./environment-variables');
 const {getVideoInfo, downloadThumbnail, downloadAudio} = require('./youtube-yt-dlp');
 const {postEpisode} = require('./anchorfm-pupeteer');
 
+function validateYoutubeVideoId(json) {
+    if(json.id === undefined || json.id === null || typeof json.id !== "string") {
+        throw new Error("Id not present in JSON");
+    }
+}
+
 function getYoutubeVideoId() {
-    return JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8')).id
+    try {
+        const json = JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8'));
+        validateYoutubeVideoId(json);
+        return json.id;
+    } catch (err) {
+        throw new Error(`Unable to get youtube video id: ${err}`);
+    }
 }
 
 async function main() {
