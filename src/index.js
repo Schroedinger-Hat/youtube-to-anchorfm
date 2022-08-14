@@ -1,8 +1,8 @@
 const fs = require('fs');
 
 const env = require('./environment-variables');
-const youtube = require('./youtube-yt-dlp');
-const anchorfm = require('./anchorfm-pupeteer');
+const {getVideoInfo, downloadThumbnail, downloadAudio} = require('./youtube-yt-dlp');
+const {postEpisode} = require('./anchorfm-pupeteer');
 
 function getYoutubeVideoId() {
     return JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8')).id
@@ -10,18 +10,20 @@ function getYoutubeVideoId() {
 
 async function main() {
     const youtubeVideoId = getYoutubeVideoId();
-    const youtubeVideoInfo = await youtube.getVideoInfo(youtubeVideoId);
-    console.log(`title: ${youtubeVideoInfo.title}`)
-    console.log(`description: ${youtubeVideoInfo.description}`)
+
+    const youtubeVideoInfo = await getVideoInfo(youtubeVideoId);
+    const {title, description} = youtubeVideoInfo;
+    console.log(`title: ${title}`)
+    console.log(`description: ${description}`)
 
     console.log("Downloading thumbnail")
-    await youtube.downloadThumbnail(youtubeVideoId);
+    await downloadThumbnail(youtubeVideoId);
 
     console.log("Downloading audio")
-    await youtube.downloadAudio(youtubeVideoId);
+    await downloadAudio(youtubeVideoId);
 
     console.log("Posting episode to anchorfm");
-    await anchorfm.postEpisode(youtubeVideoInfo);
+    await postEpisode(youtubeVideoInfo);
 }
 
 main()
