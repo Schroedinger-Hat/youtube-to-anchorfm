@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 async function postEpisode(youtubeVideoInfo) {
     try {
         console.log("Launching puppeteer");
-        const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+        const browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
         const page = await browser.newPage();
     
         const navigationPromise = page.waitForNavigation();

@@ -13,7 +13,8 @@ const defaultValues = {
     AUDIO_FILE_FORMAT: "mp3",
     AUDIO_FILE_TEMPLATE: "episode.%(ext)s",
     THUMBNAIL_FILE_FORMAT: "jpg",
-    THUMBNAIL_FILE_TEMPLATE: "thumbnail.%(ext)s"
+    THUMBNAIL_FILE_TEMPLATE: "thumbnail.%(ext)s",
+    PUPETEER_HEADLESS: true
 }
 
 const dotEnvVariables = parseDotEnvVariables();
@@ -42,6 +43,10 @@ function getTemplatedFileName(fileTemplate, fileFormat) {
     return fileTemplate.replace("%(ext)s", fileFormat);
 }
 
+function getBoolean(value) {
+    return value !== "false" ? !!value : false;
+}
+
 module.exports = {
     EPISODE_PATH: getEnvironmentVariable("EPISODE_PATH") + "/episode.json",
     ANCHOR_EMAIL: getEnvironmentVariable("ANCHOR_EMAIL"),
@@ -58,4 +63,5 @@ module.exports = {
     THUMBNAIL_FILE_TEMPLATE: getDotEnvironmentVariable("THUMBNAIL_FILE_TEMPLATE"),
     AUDIO_FILE: getTemplatedFileName(getDotEnvironmentVariable("AUDIO_FILE_TEMPLATE"), getDotEnvironmentVariable("AUDIO_FILE_FORMAT")),
     THUMBNAIL_FILE: getTemplatedFileName(getDotEnvironmentVariable("THUMBNAIL_FILE_TEMPLATE"), getDotEnvironmentVariable("THUMBNAIL_FILE_FORMAT")),
+    PUPETEER_HEADLESS: getBoolean(getDotEnvironmentVariable("PUPETEER_HEADLESS"))
 };
