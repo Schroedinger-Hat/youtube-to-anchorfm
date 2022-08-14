@@ -40,10 +40,11 @@ function getDownloadAudioOptions() {
 async function getVideoInfo(videoId) {
     console.log(`Getting JSON video info for video id ${videoId}`)
     try {
-        return await youtubedl(getVideoUrl(videoId), {
+        const result = await youtubedl(getVideoUrl(videoId), {
             ...youtubeDlOptions,
             dumpSingleJson: true
         });
+        return {title: result.title, description: result.description, url: result.original_url};
     } catch (err) {
         throw new Error(`Unable to get video info: ${err}`);
     }
