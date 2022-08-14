@@ -66,8 +66,10 @@ async function postEpisode(youtubeVideoInfo) {
             await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: env.UPLOAD_TIMEOUT});
         }
     
-        console.log("-- Publishing");
         const saveDraftOrPublishButtonXPath = env.SAVE_AS_DRAFT ? '//button[text()="Save as draft"]' : '//span[text()="Publish now"]/parent::button'
+        const saveDraftOrPublishLogMessage = env.SAVE_AS_DRAFT ? "Saving draft" : "Publishing";
+        console.log(`-- ${saveDraftOrPublishLogMessage}`);
+        
         const [button] = await page.$x(saveDraftOrPublishButtonXPath);
         await button.click();
         await navigationPromise;
