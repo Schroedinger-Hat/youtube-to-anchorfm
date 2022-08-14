@@ -47,12 +47,12 @@ async function postEpisode(youtubeVideoInfo) {
         await page.type('div[role="textbox"]', youtubeVideoInfo.description);
     
         console.log("-- Selecting content type");
-        const selectorForExplicitContentLabel = env.IS_EXPLICIT === 'true' ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
+        const selectorForExplicitContentLabel = env.IS_EXPLICIT ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
         await page.waitForSelector(selectorForExplicitContentLabel, { visible: true});
         const contentTypeLabel = await page.$(selectorForExplicitContentLabel);
         await contentTypeLabel.click();
     
-        if (env.LOAD_THUMBNAIL !== 'false') {
+        if (env.LOAD_THUMBNAIL) {
             console.log("-- Uploading episode art");
             await page.waitForSelector('input[type=file][accept="image/*"]');
             const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
@@ -67,7 +67,7 @@ async function postEpisode(youtubeVideoInfo) {
         }
     
         console.log("-- Publishing");
-        const saveDraftOrPublishButtonXPath = env.SAVE_AS_DRAFT === 'true' ? '//button[text()="Save as draft"]' : '//span[text()="Publish now"]/parent::button'
+        const saveDraftOrPublishButtonXPath = env.SAVE_AS_DRAFT ? '//button[text()="Save as draft"]' : '//span[text()="Publish now"]/parent::button'
         const [button] = await page.$x(saveDraftOrPublishButtonXPath);
         await button.click();
         await navigationPromise;
