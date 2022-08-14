@@ -1,6 +1,12 @@
 const env = require('../environment-variables');
 const puppeteer = require('puppeteer');
 
+function addUrlToDescription(youtubeVideoInfo) {
+    return env.URL_IN_DESCRIPTION ? 
+        youtubeVideoInfo.description + '\n' + youtubeVideoInfo.url 
+        : youtubeVideoInfo.description;
+}
+
 async function postEpisode(youtubeVideoInfo) {
     try {
         console.log("Launching puppeteer");
@@ -44,7 +50,8 @@ async function postEpisode(youtubeVideoInfo) {
     
         console.log("-- Adding description");
         await page.waitForSelector('div[role="textbox"]', { visible: true });
-        await page.type('div[role="textbox"]', youtubeVideoInfo.description);
+        const finalDescription = addUrlToDescription(youtubeVideoInfo);
+        await page.type('div[role="textbox"]', finalDescription);
     
         console.log("-- Selecting content type");
         const selectorForExplicitContentLabel = env.IS_EXPLICIT ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
