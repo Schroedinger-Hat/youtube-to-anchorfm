@@ -28,12 +28,8 @@ async function main() {
     console.log(`title: ${title}`)
     console.log(`description: ${description}`)
 
-    console.log("Downloading thumbnail")
-    await downloadThumbnail(youtubeVideoId);
-
-    console.log("Downloading audio")
-    await downloadAudio(youtubeVideoId);
-
+    await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
+    
     console.log("Posting episode to anchorfm");
     await postEpisode(youtubeVideoInfo);
 }
