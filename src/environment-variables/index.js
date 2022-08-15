@@ -44,7 +44,10 @@ function getTemplatedFileName(fileTemplate, fileFormat) {
 }
 
 function getBoolean(value) {
-    return value !== "false" ? !!value : false;
+    if(typeof value === "string") {
+        return value.toLowerCase() !== "false" ? true : false;
+    }
+    return !!value;
 }
 
 module.exports = {
