@@ -9,7 +9,7 @@ It is very useful in a scenario where you have a YouTube account and also a podc
 NOTE: This is a reimplementation of the original [youtube-to-anchorfm](https://github.com/Schrodinger-Hat/youtube-to-anchorfm) from Schrodinger-Hat.
 
 This reimplementation simplifies the usage of the dependencies for chromium and yt-dlp
-using the npm packages ```youtube-dl-exec```, which downloads ```yt-dlp``` automatically and ```pupeteer```, which downloads chromium browser automatically.
+using the npm packages ```youtube-dl-exec```, which downloads ```yt-dlp``` automatically and ```pupeteer```, which downloads chromium browser automatically. This makes it easy to run the script locally, without building a docker image or running it only as a Github action.
 
 This reimplementation is reoganized into several modules to make the main script more readable.
 
@@ -18,6 +18,8 @@ This reimplementation is reoganized into several modules to make the main script
 The action will start every time you push a change on the `episode.json` file. Into this file you need to specify the YouTube id of your video.
 
 The action uses a docker image built over Ubuntu. It takes some time to setup the environment before runnign the script.
+
+**NOTE**: in order for the script to run its necessary for there to be at least one episode already published on anchorFM manually, because on a brand new anchor fm account the steps to publish are bit different, it asks questions about the channel.
 
 ## How can I use this as a Github action?
 
@@ -72,6 +74,27 @@ Make sure to specify the mandatory environment variables for logging in to Ancho
  ```ANCHOR_EMAIL``` and ```ANCHOR_PASSWORD```.
 
 Finally, you can do ```npm start``` to execute the script.
+
+## How to upload a YouTube playlist to Anchorfm using this script?
+
+Currently, you can process a full playlist (one way only) with
+
+```
+curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
+    | jq '.[].contentDetails.videoId' -r \
+    | tac \
+    | xargs -I% bash -c "jo id='%' > episode.json && git commit -am % && git push"
+```
+
+`https://scc-youtube.vercel.app/playlist-items` is from https://github.com/ThatGuySam/youtube-json-server
+
+`jo` is a json generator https://github.com/jpmens/jo
+
+`tac` is a command present in most linux distributions and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
+
+`jq` is a json processor https://stedolan.github.io/jq/
+
+This must be run on the folder where your episode.json is.
 
 ## Environment variables
 
