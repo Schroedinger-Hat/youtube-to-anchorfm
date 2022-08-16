@@ -57,6 +57,8 @@ jobs:
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the sign in account.
 
+In order for the tool to run its necessary for there to be at least one episode already published on anchorFM (it can be deleted after a successful run)
+
 ## Process a YouTube playlist
 
 Right now, you can process a full playlist (one way only) with
