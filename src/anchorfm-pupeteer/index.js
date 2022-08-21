@@ -8,9 +8,10 @@ function addUrlToDescription(youtubeVideoInfo) {
 }
 
 async function postEpisode(youtubeVideoInfo) {
+    let browser = undefined;
     try {
         console.log("Launching puppeteer");
-        const browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
+        browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
         const page = await browser.newPage();
     
         const navigationPromise = page.waitForNavigation();
@@ -81,10 +82,13 @@ async function postEpisode(youtubeVideoInfo) {
         await button.click();
         await navigationPromise;
     
-        await browser.close();
         console.log("Yay");
     } catch (err) {
         throw new Error(`Unable to post episode to anchorfm: ${err}`);
+    } finally {
+        if(browser !== undefined) {
+            await browser.close();
+        }
     }
 }
 

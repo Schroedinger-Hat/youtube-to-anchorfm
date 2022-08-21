@@ -1,8 +1,10 @@
 const fs = require('fs');
+const {exit} = require('process');
 
 const env = require('./environment-variables');
 const {getVideoInfo, downloadThumbnail, downloadAudio} = require('./youtube-yt-dlp');
 const {postEpisode} = require('./anchorfm-pupeteer');
+
 
 function validateYoutubeVideoId(json) {
     if(json.id === undefined || json.id === null || typeof json.id !== "string") {
@@ -35,3 +37,8 @@ async function main() {
 }
 
 main()
+.then(_ => console.log("Finished successfully."))
+.catch(err => {
+    console.error(err);
+    exit(1);
+});
