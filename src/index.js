@@ -26,9 +26,10 @@ async function main() {
     const youtubeVideoId = getYoutubeVideoId();
 
     const youtubeVideoInfo = await getVideoInfo(youtubeVideoId);
-    const {title, description} = youtubeVideoInfo;
+    const {title, description, uploadDate} = youtubeVideoInfo;
     console.log(`title: ${title}`)
     console.log(`description: ${description}`)
+    console.log(`Upload date: ${JSON.stringify(uploadDate)}`)
 
     await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
     
