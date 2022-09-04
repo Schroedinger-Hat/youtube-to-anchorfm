@@ -1,24 +1,29 @@
 {
-  "name": "yt-to-anchor",
+  "name": "youtube-to-anchorfm",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "puppeteer": "^5.2.1",
-    "youtube-dl": "^3.0.2",
-    "dotenv": "10.0.0"
-  },
-  "devDependencies": {},
+  "description": "Github action and general-purpose tool to publish youtube video as anchorfm episode",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "download-audio-yt": "node download-episode.js",
     "upload-audio-anchor": "node upload-episode.js",
-    "upload": "npm run download-audio-yt && npm run upload-audio-anchor",
-    "prepare": "ncc build index.js -o dist --source-map -e puppeteer"
+    "upload": "npm run download-audio-yt && npm run upload-audio-anchor"
+  },
+  "dependencies": {
+    "puppeteer": "16.1.0",
+    "youtube-dl": "^3.0.2",
+    "youtube-dl-exec": "2.1.5",
+    "dotenv": "16.0.1"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/Schrodinger-Hat/youtube-to-anchorfm.git"
   },
   "author": "thejoin",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "anchorfm",
+    "youtube"
+  ]
 }
