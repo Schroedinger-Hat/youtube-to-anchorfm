@@ -16,7 +16,7 @@ const defaultValues = {
     THUMBNAIL_FILE_FORMAT: "jpg",
     THUMBNAIL_FILE_TEMPLATE: "thumbnail.%(ext)s",
     PUPETEER_HEADLESS: true
-}
+};
 
 const dotEnvVariables = parseDotEnvVariables();
 
