@@ -7,6 +7,70 @@ function addUrlToDescription(youtubeVideoInfo) {
         : youtubeVideoInfo.description;
 }
 
+async function setPublishDate(page, navigationPromise, date) {
+    console.log("-- Setting publish date");
+    const publishDateButtonSelector = '//span[contains(text(),"Publish date:")]/following-sibling::button';
+    const [publishDateButton] = await page.$x(publishDateButtonSelector);
+    await publishDateButton.click();
+    await navigationPromise;
+
+    await resetDatePickerToSelectYears(page, navigationPromise);
+    await selectYearInDatePicker(page, navigationPromise, date.year);
+    await selectMonthInDatePicker(page, navigationPromise, date.month);
+    await selectDayInDatePicker(page, navigationPromise, date.day);
+
+    const confirmButtonSelector = '//span[contains(text(),"Confirm")]/parent::button';
+    const [confirmButton] = await page.$x(confirmButtonSelector);
+    await confirmButton.click();
+    await navigationPromise;
+}
+
+async function resetDatePickerToSelectYears(page, navigationPromise) {
+    for(let i = 0; i < 2; i++) {
+        const datePickerSwitchButtonSelector = 'th[class="rdtSwitch"]';
+        const datePickerSwitchButton = await page.$(datePickerSwitchButtonSelector);
+        await datePickerSwitchButton.click();
+        await navigationPromise;
+    }
+}
+
+async function selectYearInDatePicker(page, navigationPromise, year) {
+    const rdtPrev = await page.$('th[class="rdtPrev"]');
+    let currentLowestYear = await page.$eval('tbody > tr:first-child > td:first-child', e => e.getAttribute("data-value"));
+    while(parseInt(currentLowestYear) > parseInt(year)) {
+        await rdtPrev.click();
+        await navigationPromise;
+
+        currentLowestYear = await page.$eval('tbody > tr:first-child > td:first-child', e => e.getAttribute("data-value"));
+    }
+    
+    const rdtNext = await page.$('th[class="rdtNext"]');
+    let currentHighestYear = await page.$eval('tbody > tr:last-child > td:last-child', e => e.getAttribute("data-value"));
+    while(parseInt(currentHighestYear) < parseInt(year)) {
+        await rdtNext.click();
+        await navigationPromise;
+
+        currentHighestYear = await page.$eval('tbody > tr:last-child > td:last-child', e => e.getAttribute("data-value"));
+    }
+
+    const tdYear = await page.$(`tbody > tr > td[data-value="${year}"]`);
+    await tdYear.click();
+    await navigationPromise;
+}
+
+async function selectMonthInDatePicker(page, navigationPromise, month) {
+    const [tdMonth] = await page.$x(`//tbody/tr/td[contains(text(),"${month}")]`);
+    await tdMonth.click();
+    await navigationPromise;
+}
+
+async function selectDayInDatePicker(page, navigationPromise, day) {
+    const dayWithRemovedZeroPad = parseInt(day);
+    const tdDay = await page.$(`tbody > tr > td[data-value="${dayWithRemovedZeroPad}"][class*="rdtDay"]:not([class*="rdtOld"]:not([class*="rtdNew"])`);
+    await tdDay.click();
+    await navigationPromise;
+}
+
 async function postEpisode(youtubeVideoInfo) {
     let browser = undefined;
     try {
@@ -53,7 +117,11 @@ async function postEpisode(youtubeVideoInfo) {
         await page.waitForSelector('div[role="textbox"]', { visible: true });
         const finalDescription = addUrlToDescription(youtubeVideoInfo);
         await page.type('div[role="textbox"]', finalDescription);
-    
+        
+        if (env.SET_PUBLISH_DATE) {
+            await setPublishDate(page, navigationPromise, youtubeVideoInfo.uploadDate);
+        }
+
         console.log("-- Selecting content type");
         const selectorForExplicitContentLabel = env.IS_EXPLICIT ? 'label[for="podcastEpisodeIsExplicit-true"]' : 'label[for="podcastEpisodeIsExplicit-false"]'
         await page.waitForSelector(selectorForExplicitContentLabel, { visible: true});
@@ -74,14 +142,16 @@ async function postEpisode(youtubeVideoInfo) {
             await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: env.UPLOAD_TIMEOUT});
         }
     
-        const saveDraftOrPublishButtonXPath = env.SAVE_AS_DRAFT ? '//button[text()="Save as draft"]' : '//span[text()="Publish now"]/parent::button'
-        const saveDraftOrPublishLogMessage = env.SAVE_AS_DRAFT ? "Saving draft" : "Publishing";
-        console.log(`-- ${saveDraftOrPublishLogMessage}`);
+        const saveDraftOrPublishOrScheduleButtonXPath = env.SAVE_AS_DRAFT ? '//button[text()="Save as draft"]' 
+            : env.SET_PUBLISH_DATE ? '//span[text()="Schedule episode"]/parent::button' : '//span[text()="Publish now"]/parent::button'
+        const saveDraftOrPublishOrScheduleLogMessage = env.SAVE_AS_DRAFT ? "Saving draft" 
+            : env.SET_PUBLISH_DATE ? "Scheduling" : "Publishing";
+        console.log(`-- ${saveDraftOrPublishOrScheduleLogMessage}`);
         
-        const [button] = await page.$x(saveDraftOrPublishButtonXPath);
-        await button.click();
+        const [saveDraftOrPublishOrScheduleButton] = await page.$x(saveDraftOrPublishOrScheduleButtonXPath);
+        await saveDraftOrPublishOrScheduleButton.click();
         await navigationPromise;
-    
+        
         console.log("Yay");
     } catch (err) {
         throw new Error(`Unable to post episode to anchorfm: ${err}`);

@@ -148,6 +148,15 @@ env:
    URL_IN_DESCRIPTION: true
 ```
 
+### Set a publish date for the episode
+
+By setting `SET_PUBLISH_DATE`, the new episode can be scheduled for publishing the episode on the date that the youtube video is uploaded. Please note that the scheduling will work if `SAVE_AS_DRAFT` is not set, because Anchofm doesn't store publish date for draft episodes.
+If `SET_PUBLISH_DATE` is not set, then Anchorfm will choose the current date for publishing.
+```yaml
+env:
+   SET_PUBLISH_DATE: true
+```
+
 # Credits
 
 [@thejoin](https://github.com/thejoin95)

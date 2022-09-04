@@ -44,10 +44,21 @@ async function getVideoInfo(videoId) {
             ...youtubeDlOptions,
             dumpSingleJson: true
         });
-        return {title: result.title, description: result.description, url: result.original_url};
+        return {title: result.title, description: result.description, url: result.original_url, uploadDate: parseDate(result.upload_date)};
     } catch (err) {
         throw new Error(`Unable to get video info: ${err}`);
     }
+}
+
+function parseDate(date) {
+    const monthAsWord = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun", 
+    "07": "Jul", "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"}
+
+    const year = date.substring(0, 4);
+    const month = date.substring(4, 6);
+    const day = date.substring(6, 8);
+
+    return {year, month: monthAsWord[month], day};
 }
 
 async function downloadThumbnail(videoId) {
