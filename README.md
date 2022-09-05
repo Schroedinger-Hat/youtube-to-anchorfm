@@ -59,7 +59,7 @@ jobs:
 
 To run the script locally, you need ```python3``` and ```ffmpeg``` to be avaliable in ```PATH``` which are used by the npm dependency ```youtube-dl-exec```.
 
-Clone the repository and do ```npm ci``` to install the exact dependencies that are specified in ```package-lock.json```.
+Clone the repository and run ```npm ci``` to install the exact dependencies that are specified in ```package-lock.json```.
 
 After that, you can edit ```episode.json``` that is located at the root of this repository.
 It is recommended to specify the id of a short youtube video in ```episode.json``` for testing.
