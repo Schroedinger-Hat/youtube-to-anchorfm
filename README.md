@@ -12,15 +12,13 @@ Every contribution it is appreciated, also a simple feedback.
 
 ## How it works
 
-The workflow is using `youtube-dl` library and `puppeteer`.
-
-The first one is a npm module used for downloading the video / audio from YouTube, meanwhile Puppeteer will upload the generated file into the Anchor.fm dashboard (by logging it).
-
 The action will start every time you push a change on the `episode.json` file. Into this file you need to specify the YouTube id of your video.
 
-The action use a docker image built over ubuntu 18.04. It take some times to setup the environment (installing dependencies and chromium browser).
+The action uses a docker image built over Ubuntu. It takes some time to setup the environment before runnign the script.
 
-## How can I use it?
+**NOTE**: in order for the script to run its necessary for there to be at least one episode already published on anchorFM manually, because on a brand new anchor fm account the steps to publish are bit different, it asks questions about the channel.
+
+## How can I use this as a Github action?
 
 You can use the latest version of this action from the [GitHub Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
 
@@ -57,14 +55,33 @@ jobs:
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for *ANCHOR_EMAIL* and *ANCHOR_PASSWORD*. This environment variables are mandatory as they specify the sign in account.
 
-## Process a YouTube playlist
+## How can I setup for development and use the script locally?
+
+To run the script locally, you need ```python3``` and ```ffmpeg``` to be avaliable in ```PATH``` which are used by the npm dependency ```youtube-dl-exec```.
+
+Clone the repository and run ```npm ci``` to install the exact dependencies that are specified in ```package-lock.json```.
+
+After that, you can edit ```episode.json``` that is located at the root of this repository.
+It is recommended to specify the id of a short youtube video in ```episode.json``` for testing.
+
+Then, make sure to setup your ```.env``` file in the root of this repository so you can put
+the environment variables that you normaly specify in the Github action YAML file.
+
+To do that, you can copy ```.env.sample``` into a file with name ```.env```.
+
+Make sure to specify the mandatory environment variables for logging in to Anchorfm,
+ ```ANCHOR_EMAIL``` and ```ANCHOR_PASSWORD```.
+
+Finally, you can do ```npm start``` to execute the script.
+
+## How to upload a YouTube playlist to Anchorfm using this script?
 
 ⚠ WARNING: This Potentialy violates GiHub's Terms of service ⚠
 
 > In particular, any repositories that use GitHub Actions or similar 3rd party services solely to interact with 3rd party websites, to engage in incentivized activities, or for general computing purposes may fall foul of the [GitHub Additional Product Terms (Actions)](https://docs.github.com/github/site-policy/github-terms-for-additional-products-and-features#actions), or the [GitHub Acceptable Use Policies](https://docs.github.com/github/site-policy/github-acceptable-use-policies).
 > Actions should not be used for any activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
 
-Right now, you can process a full playlist (one way only) with
+Currently, you can process a full playlist (one way only) with
 
 ```
 curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
@@ -83,7 +100,9 @@ curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3A
 
 This must be run on the folder where your episode.json is.
 
-## Draft Mode
+## Environment variables
+
+### Draft Mode
 
 By setting the `SAVE_AS_DRAFT`, the new episode will be published as a draft. This can be useful if you need someone else's
 approval before actual publication.
@@ -93,7 +112,7 @@ env:
    SAVE_AS_DRAFT: true
 ```
 
-## Audio conversion options
+### Audio conversion options
 
 ffmpeg is used to convert the video to MP3. It's possible to pass arguments to ffmpeg with `POSTPROCESSOR_ARGS` environment
 variable.
@@ -107,7 +126,7 @@ env:
    POSTPROCESSOR_ARGS: "ffmpeg:-ac 1"
 ```
 
-## Explicit Mode
+### Explicit Mode
 
 By setting the `IS_EXPLICIT`, the new episode will be marked as explicit.
 ```yaml
@@ -115,7 +134,7 @@ env:
    IS_EXPLICIT: true
 ```
 
-## Thumbnail Mode
+### Thumbnail Mode
 
 By setting the `LOAD_THUMBNAIL`, the new episode will include the video thumbnail as the episode art.
 ```yaml
@@ -123,7 +142,7 @@ env:
    LOAD_THUMBNAIL: true
 ```
 
-## Add YouTube URL to Podcast Description
+### Add YouTube URL to Podcast Description
 
 By setting the `URL_IN_DESCRIPTION`, the Podcast description will include the YouTube URL on a new line at the end of the description.
 It is recommended to set it, for if the YouTube video has no description it will fail to save the new episode. Setting it to true guarantees to always have a description.
@@ -133,11 +152,20 @@ env:
    URL_IN_DESCRIPTION: true
 ```
 
+### Set a publish date for the episode
+
+By setting `SET_PUBLISH_DATE`, the new episode can be scheduled for publishing the episode on the date that the youtube video is uploaded. Please note that the scheduling will work if `SAVE_AS_DRAFT` is not set, because Anchofm doesn't store publish date for draft episodes.
+If `SET_PUBLISH_DATE` is not set, then Anchorfm will choose the current date for publishing.
+```yaml
+env:
+   SET_PUBLISH_DATE: true
+```
 
 # Credits
 
-[@thejoin](https://github.com/thejoin95) & [@wabri](https://github.com/wabri)
+[@thejoin](https://github.com/thejoin95)
 
+[@wabri](https://github.com/wabri)
 
 # License
 
