@@ -162,13 +162,6 @@ env:
 
 [@wabri](https://github.com/wabri)
 
-# Contibutors
-
-* [TheJoin95](https://github.com/TheJoin95)
-* [Wabri](https://github.com/Wabri)
-* [abe](https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues/github.com/abe-101)
-* [matevskial](https://github.com/matevskial)
-
 # License
 
 MIT
