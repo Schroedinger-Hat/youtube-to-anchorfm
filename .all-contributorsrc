@@ -1,13 +1,25 @@
 {
   "projectName": "youtube-to-anchorfm",
-  "projectOwner": "all-contributors",
+  "projectOwner": "Schrodinger-Hat",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
   "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "Wabri",
+      "name": "GabrielePuliti",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12409541?v=4",
+      "profile": "https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/",
+      "contributions": [
+        "design"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
   "skipCi": "true"
 }
