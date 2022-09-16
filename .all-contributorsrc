@@ -30,6 +30,17 @@
         "maintenance",
         "review"
       ]
+    },
+    {
+      "login": "abe-101",
+      "name": "Abe Hanoka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/82916197?v=4",
+      "profile": "habet.dev",
+      "contributions": [
+        "code",
+        "maintenance",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
