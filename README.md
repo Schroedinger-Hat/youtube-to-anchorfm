@@ -173,6 +173,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
   <tbody>
     <tr>
       <td align="center"><a href="https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/"><img src="https://avatars.githubusercontent.com/u/12409541?v=4?s=100" width="100px;" alt=""/><br /><sub><b>GabrielePuliti</b></sub></a><br /><a href="#design-Wabri" title="Design">🎨</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=Wabri" title="Code">💻</a> <a href="#maintenance-Wabri" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3AWabri" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="https://www.mikilombardi.com"><img src="https://avatars.githubusercontent.com/u/6616203?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miki Lombardi</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=TheJoin95" title="Code">💻</a> <a href="#maintenance-TheJoin95" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3ATheJoin95" title="Reviewed Pull Requests">👀</a></td>
     </tr>
   </tbody>
 </table>
