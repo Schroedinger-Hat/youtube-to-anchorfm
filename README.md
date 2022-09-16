@@ -169,10 +169,10 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-
 <table>
   <tbody>
     <tr>
+      <td align="center"><a href="https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/"><img src="https://avatars.githubusercontent.com/u/12409541?v=4" width="100px;" alt=""/><br /><sub><b>GabrielePuliti</b></sub></a></td>
     </tr>
   </tbody>
 </table>
