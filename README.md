@@ -156,12 +156,6 @@ env:
    SET_PUBLISH_DATE: true
 ```
 
-# Credits
-
-[@thejoin](https://github.com/thejoin95)
-
-[@wabri](https://github.com/wabri)
-
 # Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
