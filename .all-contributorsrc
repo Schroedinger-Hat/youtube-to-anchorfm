@@ -1,2 +1,11 @@
 {
+  "projectName": "youtube-to-anchorfm",
+  "projectOwner": "all-contributors",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["README.md"],
+  "imageSize": 100,
+  "contributors": [],
+  "contributorsPerLine": 7,
+  "skipCi": "true"
 }
