@@ -19,6 +19,17 @@
         "maintenance",
         "review"
       ]
+    },
+    {
+      "login": "TheJoin95",
+      "name": "Miki Lombardi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6616203?v=4",
+      "profile": "https://www.mikilombardi.com",
+      "contributions": [
+        "code",
+        "maintenance",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
