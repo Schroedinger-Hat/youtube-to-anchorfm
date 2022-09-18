@@ -41,6 +41,16 @@
         "maintenance",
         "review"
       ]
+    },
+    {
+      "login": "matevskial",
+      "name": "matevskial",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44746117?v=4",
+      "profile": "https://github.com/matevskial",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
