@@ -76,6 +76,11 @@ Finally, you can do ```npm start``` to execute the script.
 
 ## How to upload a YouTube playlist to Anchorfm using this script?
 
+⚠ WARNING: This Potentialy violates GiHub's Terms of service ⚠
+
+> In particular, any repositories that use GitHub Actions or similar 3rd party services solely to interact with 3rd party websites, to engage in incentivized activities, or for general computing purposes may fall foul of the [GitHub Additional Product Terms (Actions)](https://docs.github.com/github/site-policy/github-terms-for-additional-products-and-features#actions), or the [GitHub Acceptable Use Policies](https://docs.github.com/github/site-policy/github-acceptable-use-policies).
+> Actions should not be used for any activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
+
 Currently, you can process a full playlist (one way only) with
 
 ```
