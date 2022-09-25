@@ -5,14 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "download-audio-yt": "node download-episode.js",
-    "upload-audio-anchor": "node upload-episode.js",
-    "upload": "npm run download-audio-yt && npm run upload-audio-anchor"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "puppeteer": "16.1.0",
-    "youtube-dl": "^3.0.2",
     "youtube-dl-exec": "2.1.5",
     "dotenv": "16.0.1"
   },
