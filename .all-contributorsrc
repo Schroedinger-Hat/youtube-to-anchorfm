@@ -80,6 +80,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "nicpuppa",
+      "name": "Nicola Puppa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72783243?v=4",
+      "profile": "https://github.com/nicpuppa",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
