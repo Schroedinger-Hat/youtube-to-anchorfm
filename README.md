@@ -179,6 +179,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
       <td align="center"><a href="https://github.com/zephyrus3"><img src="https://avatars.githubusercontent.com/u/47828820?v=4?s=100" width="100px;" alt="Guilherme Costa"/><br /><sub><b>Guilherme Costa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=zephyrus3" title="Code">💻</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3Azephyrus3" title="Bug reports">🐛</a></td>
       <td align="center"><a href="https://github.com/weltonrodrigo"><img src="https://avatars.githubusercontent.com/u/1644644?v=4?s=100" width="100px;" alt="Welton Rodrigo Torres Nascimento"/><br /><sub><b>Welton Rodrigo Torres Nascimento</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Documentation">📖</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/nicpuppa"><img src="https://avatars.githubusercontent.com/u/72783243?v=4?s=100" width="100px;" alt="Nicola Puppa"/><br /><sub><b>Nicola Puppa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=nicpuppa" title="Documentation">📖</a></td>
+    </tr>
   </tbody>
   <tfoot>
     
