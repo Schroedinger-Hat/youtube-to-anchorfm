@@ -60,6 +60,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "zephyrus3",
+      "name": "Guilherme Costa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47828820?v=4",
+      "profile": "https://github.com/zephyrus3",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
