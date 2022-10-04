@@ -89,6 +89,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TobiTenno",
+      "name": "Matt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7128721?v=4",
+      "profile": "http://matej.voboril.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

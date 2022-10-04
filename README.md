@@ -181,6 +181,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/nicpuppa"><img src="https://avatars.githubusercontent.com/u/72783243?v=4?s=100" width="100px;" alt="Nicola Puppa"/><br /><sub><b>Nicola Puppa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=nicpuppa" title="Documentation">📖</a></td>
+      <td align="center"><a href="http://matej.voboril.dev"><img src="https://avatars.githubusercontent.com/u/7128721?v=4?s=100" width="100px;" alt="Matt"/><br /><sub><b>Matt</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3ATobiTenno" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
   <tfoot>
