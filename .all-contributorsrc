@@ -51,6 +51,15 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "Amod02-prog",
+      "name": "Amod Deshpande",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83520862?v=4",
+      "profile": "https://github.com/Amod02-prog",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
