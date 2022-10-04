@@ -1,0 +1,19 @@
+{
+  "plugins": ["prettier"],
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["airbnb-base", "prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": "off",
+    "no-use-before-define": "off",
+    "no-await-in-loop": "off"
+  }
+}
