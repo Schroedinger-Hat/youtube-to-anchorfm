@@ -16,7 +16,7 @@ The action will start every time you push a change on the `episode.json` file. I
 
 The action uses a docker image built over Ubuntu. It takes some time to setup the environment before running the script.
 
-**NOTE**: in order for the script to run its necessary for there to be at least one episode already published on anchorFM manually, because on a brand new anchor fm account the steps to publish are bit different, it asks questions about the channel.
+**NOTE**: For the script to run successfully its necessary for there to be at least one episode manually published on Anchor.fm. As the steps to publish on a brand new Anchor.fm account are different, and the automation will brake.
 
 ## How can I use this as a GitHub action?
 
