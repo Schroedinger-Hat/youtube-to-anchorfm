@@ -56,26 +56,6 @@ jobs:
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _ANCHOR_EMAIL_ and _ANCHOR_PASSWORD_. This environment variables are mandatory as they specify the sign in account.
 
-## How can I setup for development and use the script locally?
-
-To run the script locally, you need `python3` and `ffmpeg` to be available in `PATH` which are used by the npm dependency `youtube-dl-exec`.
-
-Clone the repository and run `npm ci` to install the exact dependencies that are specified in `package-lock.json`.
-
-After that, you can edit `episode.json` that is located at the root of this repository.
-It is recommended to specify the id of a short YouTube video in `episode.json` for testing.
-
-Then, make sure to setup your `.env` file in the root of this repository so you can put
-the environment variables that you normally specify in the GitHub action YAML file.
-
-To do that, you can copy `.env.sample` into a file with name `.env`.
-
-Make sure to specify the mandatory environment variables for logging in to Anchor.fm,
-`ANCHOR_EMAIL` and `ANCHOR_PASSWORD`.
-
-Finally, you can do `npm start` to execute the script.
-
-
 
 ## Environment variables
 
@@ -140,6 +120,25 @@ If `SET_PUBLISH_DATE` is not set, then Anchor.fm will choose the current date fo
 env:
   SET_PUBLISH_DATE: true
 ```
+
+## How can I setup for development and use the script locally?
+
+To run the script locally, you need `python3` and `ffmpeg` to be available in `PATH` which are used by the npm dependency `youtube-dl-exec`.
+
+Clone the repository and run `npm ci` to install the exact dependencies that are specified in `package-lock.json`.
+
+After that, you can edit `episode.json` that is located at the root of this repository.
+It is recommended to specify the id of a short YouTube video in `episode.json` for testing.
+
+Then, make sure to setup your `.env` file in the root of this repository so you can put
+the environment variables that you normally specify in the GitHub action YAML file.
+
+To do that, you can copy `.env.sample` into a file with name `.env`.
+
+Make sure to specify the mandatory environment variables for logging in to Anchor.fm,
+`ANCHOR_EMAIL` and `ANCHOR_PASSWORD`.
+
+Finally, you can do `npm start` to execute the script.
 
 ## How to upload a YouTube playlist to Anchor.fm using this script?
 
