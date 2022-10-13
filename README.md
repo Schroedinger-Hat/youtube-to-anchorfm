@@ -6,7 +6,7 @@ This action will upload an audio file from a given YouTube video automatically t
 
 It is very useful in a scenario where you have a YouTube account and also a podcast over Spotify, Anchor.fm, Play Music, iTunes etc.
 
-In our live show (Schrodinger Hat) we had this necessity. So we built it for the open source community.
+In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
 Every contribution it is appreciated, also a simple feedback.
 
