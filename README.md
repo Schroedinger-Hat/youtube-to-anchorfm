@@ -18,11 +18,11 @@ The action uses a docker image built over Ubuntu. It takes some time to setup th
 
 **NOTE**: For the script to run successfully its necessary for there to be at least one episode manually published on Anchor.fm. As the steps to publish on a brand new Anchor.fm account are different, and the automation will brake.
 
-## How can I use this as a GitHub action?
+## How can I run this as a GitHub action?
 
 You can use the latest version of this action from the [GitHub Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
 
-In your repository root directory you should add a `episode.json` file containing your YouTube video id, e.g.:
+In the repository root directory add a `episode.json` file containing your YouTube video id, e.g.:
 
 ```json
 {
@@ -30,7 +30,7 @@ In your repository root directory you should add a `episode.json` file containin
 }
 ```
 
-Then you can add under the `.github/workflows` directory this yml:
+Then create a GitHub action in the `.github/workflows` directory with this yaml:
 
 ```yaml
 name: 'Upload Episode from YouTube To Anchor.Fm'
