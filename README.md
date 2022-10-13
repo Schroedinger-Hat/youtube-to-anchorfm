@@ -8,7 +8,7 @@ It is very useful in a scenario where you have a YouTube account and also a podc
 
 In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
-Every contribution it is appreciated, also a simple feedback.
+Every contribution is appreciated, even just some simple feedback.
 
 ## How it works
 
