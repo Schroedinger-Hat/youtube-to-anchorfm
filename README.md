@@ -75,31 +75,7 @@ Make sure to specify the mandatory environment variables for logging in to Ancho
 
 Finally, you can do `npm start` to execute the script.
 
-## How to upload a YouTube playlist to Anchor.fm using this script?
 
-⚠ WARNING: This Potentially violates GitHub's Terms of service ⚠
-
-> In particular, any repositories that use GitHub Actions or similar 3rd party services solely to interact with 3rd party websites, to engage in incentivized activities, or for general computing purposes may fall foul of the [GitHub Additional Product Terms (Actions)](https://docs.github.com/github/site-policy/github-terms-for-additional-products-and-features#actions), or the [GitHub Acceptable Use Policies](https://docs.github.com/github/site-policy/github-acceptable-use-policies).
-> Actions should not be used for any activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
-
-Currently, you can process a full playlist (one way only) with
-
-```
-curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
-    | jq '.[].contentDetails.videoId' -r \
-    | tac \
-    | xargs -I% bash -c "jo id='%' > episode.json && git commit -am % && git push"
-```
-
-`https://scc-youtube.vercel.app/playlist-items` is from https://github.com/ThatGuySam/youtube-json-server
-
-`jo` is a json generator https://github.com/jpmens/jo
-
-`tac` is a command present in most Linux distributions and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
-
-`jq` is a json processor https://stedolan.github.io/jq/
-
-This must be run on the folder where your episode.json is.
 
 ## Environment variables
 
@@ -164,6 +140,32 @@ If `SET_PUBLISH_DATE` is not set, then Anchor.fm will choose the current date fo
 env:
   SET_PUBLISH_DATE: true
 ```
+
+## How to upload a YouTube playlist to Anchor.fm using this script?
+
+⚠ WARNING: This Potentially violates GitHub's Terms of service ⚠
+
+> In particular, any repositories that use GitHub Actions or similar 3rd party services solely to interact with 3rd party websites, to engage in incentivized activities, or for general computing purposes may fall foul of the [GitHub Additional Product Terms (Actions)](https://docs.github.com/github/site-policy/github-terms-for-additional-products-and-features#actions), or the [GitHub Acceptable Use Policies](https://docs.github.com/github/site-policy/github-acceptable-use-policies).
+> Actions should not be used for any activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
+
+Currently, you can process a full playlist (one way only) with
+
+```
+curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
+    | jq '.[].contentDetails.videoId' -r \
+    | tac \
+    | xargs -I% bash -c "jo id='%' > episode.json && git commit -am % && git push"
+```
+
+`https://scc-youtube.vercel.app/playlist-items` is from https://github.com/ThatGuySam/youtube-json-server
+
+`jo` is a json generator https://github.com/jpmens/jo
+
+`tac` is a command present in most Linux distributions and on mac with brew install coreutils. Its from reversing the list from older to newer. Remove if you want to upload in the order presented on YouTube.
+
+`jq` is a json processor https://stedolan.github.io/jq/
+
+This must be run on the folder where your episode.json is.
 
 # Contributors
 
