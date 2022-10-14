@@ -4,7 +4,7 @@
 
 This action will upload an audio file from a given YouTube video automatically to your Anchor.fm account.
 
-It is very useful in a scenario where you have a YouTube account and also a podcast over Spotify, Anchor.fm, Play Music, iTunes etc.
+It is very useful in a scenario where you have a YouTube account and also a podcast at Spotify through Anchor.fm.
 
 In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
