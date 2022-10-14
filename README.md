@@ -10,6 +10,25 @@ In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqf
 
 Every contribution is appreciated, even just some simple feedback.
 
+Table of Contents
+=================
+
+* [YouTube to Anchor.fm - An automation tool to publish your podcast](#youtube-to-anchorfm---an-automation-tool-to-publish-your-podcast)
+   * [How it works](#how-it-works)
+   * [How can I run this as a GitHub action?](#how-can-i-run-this-as-a-github-action)
+   * [Environment variables](#environment-variables)
+      * [Draft Mode](#draft-mode)
+      * [Audio conversion options](#audio-conversion-options)
+      * [Explicit Mode](#explicit-mode)
+      * [Thumbnail Mode](#thumbnail-mode)
+      * [Add YouTube URL to Podcast Description](#add-youtube-url-to-podcast-description)
+      * [Set a publish date for the episode](#set-a-publish-date-for-the-episode)
+   * [How can I setup for development and use the script locally?](#how-can-i-setup-for-development-and-use-the-script-locally)
+   * [How to upload a YouTube playlist to Anchor.fm using this script?](#how-to-upload-a-youtube-playlist-to-anchorfm-using-this-script)
+* [Contributors](#contributors)
+* [License](#license)
+
+
 ## How it works
 
 The action will start every time you push a change on the `episode.json` file. Into this file you need to specify the YouTube id of your video.
