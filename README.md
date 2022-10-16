@@ -8,7 +8,7 @@ It is very useful in a scenario where you have a YouTube account and also a podc
 
 In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
-Every contribution is appreciated, even just some simple feedback.
+Every contribution is appreciated, even just a simple feedback.
 
 Table of Contents
 =================
@@ -35,7 +35,7 @@ The action will start every time you push a change on the `episode.json` file. I
 
 The action uses a docker image built over Ubuntu. It takes some time to setup the environment before running the script.
 
-**NOTE**: For the script to run successfully its necessary for there to be at least one episode manually published on Anchor.fm. As the steps to publish on a brand new Anchor.fm account are different, and the automation will brake.
+**NOTE**: For the script to run successfully its necessary for there to be at least one episode manually published on Anchor.fm, as the steps to publish on a brand new Anchor.fm account are different, and the automation will break.
 
 ## How can I run this as a GitHub action?
 
