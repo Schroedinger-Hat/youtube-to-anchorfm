@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 
 const defaultValues = {
   EPISODE_PATH: '.',
+  EPISODE_FILE: 'episode.json',
   ANCHOR_EMAIL: '',
   ANCHOR_PASSWORD: '',
   UPLOAD_TIMEOUT: 60 * 5 * 1000,
@@ -53,8 +54,14 @@ function getBoolean(value) {
   return !!value;
 }
 
+function getCompleteEpisodePath() {
+  const episodePath = getEnvironmentVariable('EPISODE_PATH');
+  const episodeFile = getEnvironmentVariable('EPISODE_FILE');
+  return `${episodePath}/${episodeFile}`;
+}
+
 module.exports = {
-  EPISODE_PATH: `${getEnvironmentVariable('EPISODE_PATH')}/episode.json`,
+  EPISODE_PATH: getCompleteEpisodePath(),
   ANCHOR_EMAIL: getEnvironmentVariable('ANCHOR_EMAIL'),
   ANCHOR_PASSWORD: getEnvironmentVariable('ANCHOR_PASSWORD'),
   UPLOAD_TIMEOUT: getEnvironmentVariable('UPLOAD_TIMEOUT'),
