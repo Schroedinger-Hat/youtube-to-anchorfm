@@ -12,9 +12,11 @@ RUN apt-get install libnss3 libnss3-tools libxss1 libgtk-3-0 -y
 # To allow MP3 conversion
 RUN apt-get install ffmpeg -y
 
-COPY src /src
 COPY package-lock.json /package-lock.json
 COPY package.json /package.json
+RUN npm ci
+COPY src /src
+
 COPY entrypoint.sh /entrypoint.sh
 COPY episode.json /episode.json
 
