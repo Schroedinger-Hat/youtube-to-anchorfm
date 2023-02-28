@@ -8,9 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "puppeteer": "16.1.0",
-    "youtube-dl-exec": "2.1.5",
-    "dotenv": "16.0.1"
+    "dotenv": "^16.0.3",
+    "puppeteer": "^19.7.2",
+    "youtube-dl-exec": "^2.3.1"
   },
   "repository": {
     "type": "git",
@@ -23,11 +23,11 @@
     "youtube"
   ],
   "devDependencies": {
-    "prettier": "2.7.1",
     "eslint": "8.24.0",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-plugin-import": "2.26.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.2.1"
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "prettier": "2.7.1"
   }
 }
