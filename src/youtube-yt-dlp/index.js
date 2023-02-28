@@ -1,4 +1,5 @@
-const youtubedl = require('youtube-dl-exec');
+const { create: createYoutubeDl } = require('youtube-dl-exec')
+const youtubedl = createYoutubeDl('/usr/local/bin/yt-dlp')
 const env = require('../environment-variables');
 const { AUDIO_FILE_FORMAT, THUMBNAIL_FILE_FORMAT } = require('../environment-variables');
 

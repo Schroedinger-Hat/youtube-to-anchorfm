@@ -17,10 +17,17 @@ COPY package.json /package.json
 RUN npm ci
 COPY src /src
 
+# Temporarily get master yt-dlp for bug https://github.com/yt-dlp/yt-dlp/issues/6369
+RUN apt install pip -y 
+RUN python3 -m pip install -U pip setuptools wheel https://codeload.github.com/yt-dlp/yt-dlp/zip/5b28cef72db3b531680d89c121631c73ae05354f
+# RUN python3 -m pip install 
+
 COPY entrypoint.sh /entrypoint.sh
 COPY episode.json /episode.json
 
 RUN chmod 777 /entrypoint.sh
 ENV LC_ALL=en_US.UTF-8
+
+
 
 ENTRYPOINT [ "/entrypoint.sh" ]
