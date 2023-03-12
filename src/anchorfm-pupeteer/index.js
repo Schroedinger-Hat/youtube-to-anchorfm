@@ -73,7 +73,7 @@ async function selectMonthInDatePicker(page, navigationPromise, month) {
 async function selectDayInDatePicker(page, navigationPromise, day) {
   const dayWithRemovedZeroPad = parseInt(day, 10);
   const tdDay = await page.$(
-    `tbody > tr > td[data-value="${dayWithRemovedZeroPad}"][class*="rdtDay"]:not([class*="rdtOld"]:not([class*="rtdNew"])`
+    `tbody > tr > td[data-value="${dayWithRemovedZeroPad}"][class*="rdtDay"]`
   );
   await tdDay.click();
   await navigationPromise;
