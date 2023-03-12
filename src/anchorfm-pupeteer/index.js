@@ -88,13 +88,19 @@ async function postEpisode(youtubeVideoInfo) {
 
     const navigationPromise = page.waitForNavigation();
 
-    await page.goto('https://anchor.fm/dashboard/episode/new');
+    await page.goto('https://podcasters.spotify.com/pod/dashboard/episode/new');
 
     await page.setViewport({ width: 1600, height: 789 });
 
     await navigationPromise;
 
     console.log('Trying to log in');
+    /* The reason for the wait is because
+    anchorfm can take a little longer to load the form for logging in 
+    and because pupeteer treats the page as loaded(or navigated to) 
+    even when the form is not showed
+    */
+    await page.waitForSelector('#email');
     await page.type('#email', env.ANCHOR_EMAIL);
     await page.type('#password', env.ANCHOR_PASSWORD);
     await page.click('button[type=submit]');
