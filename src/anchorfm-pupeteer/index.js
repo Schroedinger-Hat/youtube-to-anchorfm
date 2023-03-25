@@ -88,13 +88,19 @@ async function postEpisode(youtubeVideoInfo) {
 
     const navigationPromise = page.waitForNavigation();
 
-    await page.goto('https://anchor.fm/dashboard/episode/new');
+    await page.goto('https://podcasters.spotify.com/pod/dashboard/episode/new');
 
     await page.setViewport({ width: 1600, height: 789 });
 
     await navigationPromise;
 
     console.log('Trying to log in');
+    /* The reason for the wait is because
+    anchorfm can take a little longer to load the form for logging in 
+    and because pupeteer treats the page as loaded(or navigated to) 
+    even when the form is not showed
+    */
+    await page.waitForSelector('#email');
     await page.type('#email', env.ANCHOR_EMAIL);
     await page.type('#password', env.ANCHOR_PASSWORD);
     await page.click('button[type=submit]');
@@ -107,7 +113,9 @@ async function postEpisode(youtubeVideoInfo) {
     await inputFile.uploadFile(env.AUDIO_FILE);
 
     console.log('Waiting for upload to finish');
-    await page.waitForTimeout(25 * 1000);
+    await new Promise((r) => {
+      setTimeout(r, 25 * 1000);
+    });
 
     const saveEpisodeButtonSelector = '//span[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]';
     await page.waitForXPath(saveEpisodeButtonSelector, { timeout: env.UPLOAD_TIMEOUT });
@@ -118,7 +126,9 @@ async function postEpisode(youtubeVideoInfo) {
     console.log('-- Adding title');
     await page.waitForSelector('#title', { visible: true });
     // Wait some time so any field refresh doesn't mess up with our input
-    await page.waitForTimeout(2000);
+    await new Promise((r) => {
+      setTimeout(r, 2000);
+    });
     await page.type('#title', youtubeVideoInfo.title);
 
     console.log('-- Adding description');
