@@ -9,8 +9,8 @@ function addUrlToDescription(youtubeVideoInfo) {
 
 async function setPublishDate(page, navigationPromise, date) {
   console.log('-- Setting publish date');
-  await clickSelector(page,
-    '#app-content > div > form > div.sc-ecGeiE.crgHTL > div > button',
+  await clickXpath(page,
+    '//span[contains(text(),"Publish date:")]/following-sibling::button',
     env.UPLOAD_TIMEOUT)
   await navigationPromise;
 
@@ -19,8 +19,8 @@ async function setPublishDate(page, navigationPromise, date) {
   await selectMonthInDatePicker(page, navigationPromise, date.month);
   await selectDayInDatePicker(page, navigationPromise, date.day);
 
-  await clickSelector(page,
-    'body > reach-portal > div:nth-child(2) > div > div > div > div.sc-iAKWXU.hVFUbQ > div.sc-cCcXHH.dMPWmq > button.Button-sc-qlcn5g-0.hWxHrB',
+  await clickXpath(page,
+    '//span[contains(text(),"Confirm")]/parent::button',
     env.UPLOAD_TIMEOUT)
   await navigationPromise;
 }
@@ -88,6 +88,18 @@ async function clickSelector(page, selector, timeout) {
   }
 }
 
+async function clickXpath(page, xpath, timeout){
+  try{
+    const xpathElem = xpath
+    await page.waitForXPath(xpathElem, { timeout: timeout });
+    const [xpathBtn] = await page.$x(xpathElem);
+    await clickDom(page,xpathBtn)
+  }catch (error){
+    console.log(`Error clicking xPath: ${xpathElem}`)
+  }
+  
+}
+
 async function clickDom(page, domBtn){
   await page.evaluate((elem)=>{
     elem.click();
@@ -117,8 +129,18 @@ async function postEpisode(youtubeVideoInfo) {
     even when the form is not showed
     */
 
-    try{
+    await clickXpath(page,
+      '//button[@aria-label="Change language"]',
+      env.UPLOAD_TIMEOUT);
+    await navigationPromise;
 
+    await clickXpath(page,
+      '//a[@data-testid="language-option-en"]',
+      env.UPLOAD_TIMEOUT)
+    await navigationPromise;
+
+    try{
+      //await new Promise((r) => {setTimeout(r, 70 * 1000);});
       await clickSelector(page, '#onetrust-pc-btn-handler', env.COOKIE_TIMEOUT);
       await clickSelector(page, '#cookie-preferences > div.save-preference-btn-container > button', env.UPLOAD_TIMEOUT);
 
@@ -149,10 +171,9 @@ async function postEpisode(youtubeVideoInfo) {
       setTimeout(r, 25 * 1000);
     });
 
-    await clickSelector(page, 
-      '#app-content > div > div > div > div > div.sc-kOJRsK.icMpAT > button:not([disabled]) > span.ButtonInner-sc-14ud5tc-0.cLOWub.encore-bright-accent-set', 
-      env.UPLOAD_TIMEOUT);
-      
+    await clickXpath(page,
+      '//span[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]',
+      env.UPLOAD_TIMEOUT)
     await navigationPromise;
     
     console.log('-- Adding title');
@@ -187,19 +208,18 @@ async function postEpisode(youtubeVideoInfo) {
       await inputEpisodeArt.uploadFile(env.THUMBNAIL_FILE);
 
       console.log('-- Saving uploaded episode art');
-
-      await clickSelector(page, 
-        'body > reach-portal > div:nth-child(2) > div > div > div > div.sc-iAKWXU.hVFUbQ > div > div.sc-cCcXHH.dMPWmq > button.Button-sc-qlcn5g-0.hWxHrB > span.ButtonInner-sc-14ud5tc-0.cLOWub.encore-bright-accent-set', 
-        env.UPLOAD_TIMEOUT);
+      await clickXpath(page,
+        '//span[text()="Save"]/parent::button',
+        env.UPLOAD_TIMEOUT)
 
       await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
     }
 
     const saveDraftOrPublishOrScheduleButtonDescription = getSaveDraftOrPublishOrScheduleButtonDescription();
     console.log(`-- ${saveDraftOrPublishOrScheduleButtonDescription.message}`);
-    await clickSelector(page, 
-      saveDraftOrPublishOrScheduleButtonDescription.selector,
-      env.UPLOAD_TIMEOUT)
+    await clickXpath(page,
+      saveDraftOrPublishOrScheduleButtonDescription.xpath,
+      env.UPLOAD_TIMEOUT);
     await navigationPromise;
 
     console.log('Yay');
