@@ -236,7 +236,7 @@ function getSaveDraftOrPublishOrScheduleButtonDescription() {
   if (env.SAVE_AS_DRAFT) {
     return {
       selector: '#app-content > div > form > div.sc-kgwpUT.fYJoqV > div.sc-hGVAJH.sc-lfzZHy.dnsAoX.kwvghZ > button.Button-sc-y0gtbx-0.kCUxRI',
-      xpath: '//button[@class="Button-sc-y0gtbx-0 kCUxRI"]',
+      xpath: '//button[text()="Save as draft"]',
       message: 'Saving draft',
     };
   }
