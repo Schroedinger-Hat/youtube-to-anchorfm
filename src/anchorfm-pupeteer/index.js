@@ -160,6 +160,14 @@ async function postEpisode(youtubeVideoInfo) {
     );
     await navigationPromise;
 
+    /*
+    This is a workaround solution of the problem where the podcast
+    is sometimes saved as draft with title "Untitled" and no other metadata.
+    We navigate to the spotify/anchorfm dashboard immediately after podcast is
+    published/scheduled.
+     */
+    await page.goto('https://podcasters.spotify.com/pod/dashboard/episodes');
+
     console.log('Yay');
   } catch (err) {
     throw new Error(`Unable to post episode to anchorfm: ${err}`);
