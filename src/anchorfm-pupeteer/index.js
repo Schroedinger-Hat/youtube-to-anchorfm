@@ -86,6 +86,9 @@ async function postEpisode(youtubeVideoInfo) {
 
     await navigationPromise;
 
+    console.log('Accessing Log in with email');
+    await clickXpath(page, '//button[contains(text(), "Log in with email")]');
+
     console.log('Trying to log in');
     /* The reason for the wait is because
     anchorfm can take a little longer to load the form for logging in 
