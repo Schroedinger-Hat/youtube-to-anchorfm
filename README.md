@@ -23,6 +23,7 @@ Table of Contents
       * [Thumbnail Mode](#thumbnail-mode)
       * [Add YouTube URL to Podcast Description](#add-youtube-url-to-podcast-description)
       * [Set a publish date for the episode](#set-a-publish-date-for-the-episode)
+  * [Multiple shows per repository](#multiple-shows-per-repository)
    * [How can I setup for development and use the script locally?](#how-can-i-setup-for-development-and-use-the-script-locally)
    * [How to upload a YouTube playlist to Anchor.fm using this script?](#how-to-upload-a-youtube-playlist-to-anchorfm-using-this-script)
 * [Contributors](#contributors)
@@ -138,6 +139,55 @@ If `SET_PUBLISH_DATE` is not set, then Anchor.fm will choose the current date fo
 ```yaml
 env:
   SET_PUBLISH_DATE: true
+```
+
+## Multiple shows per repository
+
+It is possible to use a single repository to maintain several shows.
+
+You'll need an episode config per show.
+
+As an example, suppose you have two shows, you called "Great News" and another "Sad News".
+
+You repository will look like this:
+
+```
+.github/
+├─ workflows/
+│  ├─ great-news.yaml
+│  ├─ sad-news.yaml
+great-news.json
+sad-news.json
+```
+
+In `great-news.json` and `sad-news.json`, you have:
+```json
+{
+  "id": "episode_video_id"
+}
+```
+
+In `great-news.yaml` and `sad-news.yaml`:
+```yaml
+name: 'Great News Upload Action'
+on:
+  push:
+    paths: 
+    ## only updates to this file trigger this action
+      - great-news.json   # or sad-news.json
+jobs:
+  upload_episode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload Episode from YouTube To Anchor.Fm
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.0.0
+        env:
+          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL_GREATNEWS}}  # OR secrets.ANCHOR_EMAIL_SADNEWS 
+          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD_GREATNEWS }}  # OR secrets.ANCHOR_PASSWORD_SADNEWS
+          EPISODE_PATH: /github/workspace/
+          EPISODE_FILE: great-news.json
+          # (…) Other configs as needed
 ```
 
 ## How can I setup for development and use the script locally?
