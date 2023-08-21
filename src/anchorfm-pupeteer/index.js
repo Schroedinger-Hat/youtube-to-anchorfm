@@ -71,6 +71,11 @@ async function selectDayInDatePicker(page, navigationPromise, day) {
   await navigationPromise;
 }
 
+async function setLanguageToEnglish(page) {
+  await clickSelector(page, 'button[aria-label="Change language"]');
+  await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
+}
+
 async function postEpisode(youtubeVideoInfo) {
   let browser;
   try {
@@ -85,6 +90,9 @@ async function postEpisode(youtubeVideoInfo) {
     await page.setViewport({ width: 1600, height: 789 });
 
     await navigationPromise;
+
+    console.log('Setting language to English');
+    await setLanguageToEnglish(page);
 
     console.log('Accessing Log in with email');
     await clickXpath(page, '//button[contains(text(), "Log in with email")]');
