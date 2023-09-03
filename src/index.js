@@ -2,7 +2,7 @@ const fs = require('fs');
 const { exit } = require('process');
 
 const env = require('./environment-variables');
-const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
+const { getVideoInfo, downloadThumbnail, downloadAudio, downloadVideo } = require('./youtube-yt-dlp');
 const { postEpisode } = require('./anchorfm-pupeteer');
 
 function validateYoutubeVideoId(json) {
@@ -30,10 +30,10 @@ async function main() {
   console.log(`description: ${description}`);
   console.log(`Upload date: ${JSON.stringify(uploadDate)}`);
 
-  await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
+  await Promise.all([downloadThumbnail(youtubeVideoId), downloadVideo(youtubeVideoId)]);
 
-  console.log('Posting episode to anchorfm');
-  await postEpisode(youtubeVideoInfo);
+  // console.log('Posting episode to anchorfm');
+  // await postEpisode(youtubeVideoInfo);
 }
 
 main()

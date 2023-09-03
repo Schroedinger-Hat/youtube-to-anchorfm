@@ -37,6 +37,18 @@ function getDownloadAudioOptions() {
   return options;
 }
 
+function getDownloadVideoOptions() {
+  const options = {
+    ...youtubeDlOptions,
+    f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
+    forceOverwrites: true,
+  };
+  if (env.POSTPROCESSOR_ARGS.length > 0) {
+    options.postprocessorArgs = env.POSTPROCESSOR_ARGS;
+  }
+  return options;
+}
+
 async function getVideoInfo(videoId) {
   console.log(`Getting JSON video info for video id ${videoId}`);
   try {
@@ -98,8 +110,19 @@ async function downloadAudio(videoId) {
   }
 }
 
+async function downloadVideo(videoId) {
+  console.log(`Downloading video for video id ${videoId}`);
+  try {
+    await youtubedl(getVideoUrl(videoId), getDownloadVideoOptions());
+    console.log(`Downloaded video for video id ${videoId}`);
+  } catch (err) {
+    throw new Error(`Unable to download video: ${err}`);
+  }
+}
+
 module.exports = {
   getVideoInfo,
   downloadThumbnail,
   downloadAudio,
+  downloadVideo,
 };
