@@ -12,7 +12,7 @@ function getVideoUrl(videoId) {
   return `https://www.youtube.com/watch?v=${videoId}`;
 }
 
-function getDownloaThumbnailOptions() {
+function getDownloadThumbnailOptions() {
   return {
     ...youtubeDlOptions,
     skipDownload: true,
@@ -81,7 +81,7 @@ function parseDate(date) {
 async function downloadThumbnail(videoId) {
   console.log(`Downloading thumbnail for video id ${videoId}`);
   try {
-    await youtubedl(getVideoUrl(videoId), getDownloaThumbnailOptions());
+    await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions());
     console.log(`Downloaded thumbnail for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download video thumbnail: ${err}`);
