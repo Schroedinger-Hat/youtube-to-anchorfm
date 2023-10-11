@@ -103,7 +103,6 @@ async function postEpisode(youtubeVideoInfo) {
     and because pupeteer treats the page as loaded(or navigated to) 
     even when the form is not showed
     */
-    
     await page.waitForSelector('#email');
     await page.type('#email', env.ANCHOR_EMAIL);
     await page.type('#password', env.ANCHOR_PASSWORD);
@@ -121,13 +120,11 @@ async function postEpisode(youtubeVideoInfo) {
       setTimeout(r, 25 * 1000);
     });
 
-    await clickXpath(
-      page,
-      '//span[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]',
-      {timeout: env.UPLOAD_TIMEOUT}
-    );
+    await clickXpath(page, '//span[contains(text(),"Save")]/parent::button[not(boolean(@disabled))]', {
+      timeout: env.UPLOAD_TIMEOUT,
+    });
     await navigationPromise;
-    
+
     console.log('-- Adding title');
     await page.waitForSelector('#title', { visible: true });
     // Wait some time so any field refresh doesn't mess up with our input
@@ -149,7 +146,7 @@ async function postEpisode(youtubeVideoInfo) {
     const selectorForExplicitContentLabel = env.IS_EXPLICIT
       ? 'label[for="podcastEpisodeIsExplicit-true"]'
       : 'label[for="podcastEpisodeIsExplicit-false"]';
-    await clickSelector(page, selectorForExplicitContentLabel, {visible: true});
+    await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
 
     if (env.LOAD_THUMBNAIL) {
       console.log('-- Uploading episode art');
@@ -158,17 +155,14 @@ async function postEpisode(youtubeVideoInfo) {
       await inputEpisodeArt.uploadFile(env.THUMBNAIL_FILE);
 
       console.log('-- Saving uploaded episode art');
-      await clickXpath(page,'//span[text()="Save"]/parent::button');
+      await clickXpath(page, '//span[text()="Save"]/parent::button');
 
       await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
     }
 
     const saveDraftOrPublishOrScheduleButtonDescription = getSaveDraftOrPublishOrScheduleButtonDescription();
     console.log(`-- ${saveDraftOrPublishOrScheduleButtonDescription.message}`);
-    await clickXpath(
-      page,
-      saveDraftOrPublishOrScheduleButtonDescription.xpath
-    );
+    await clickXpath(page, saveDraftOrPublishOrScheduleButtonDescription.xpath);
     await navigationPromise;
 
     /*
@@ -210,21 +204,20 @@ function getSaveDraftOrPublishOrScheduleButtonDescription() {
   };
 }
 
-
 async function clickSelector(page, selector, options = {}) {
   await page.waitForSelector(selector, options);
   const element = await page.$(selector);
   await clickDom(page, element);
 }
 
-async function clickXpath(page, xpath, options = {}){
+async function clickXpath(page, xpath, options = {}) {
   await page.waitForXPath(xpath, options);
   const [xpathBtn] = await page.$x(xpath);
-  await clickDom(page,xpathBtn);
+  await clickDom(page, xpathBtn);
 }
 
-async function clickDom(page, domBtn){
-  await page.evaluate((elem)=>{
+async function clickDom(page, domBtn) {
+  await page.evaluate((elem) => {
     elem.click();
   }, domBtn);
 }
