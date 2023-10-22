@@ -222,20 +222,18 @@ async function sleepSeconds(seconds) {
 
 async function clickSelector(page, selector, options = {}) {
   await page.waitForSelector(selector, options);
-  const element = await page.$(selector);
-  await clickDom(page, element);
+  const elementHandle = await page.$(selector);
+  await clickDom(page, elementHandle);
 }
 
 async function clickXpath(page, xpath, options = {}) {
   await page.waitForXPath(xpath, options);
-  const [xpathBtn] = await page.$x(xpath);
-  await clickDom(page, xpathBtn);
+  const [elementHandle] = await page.$x(xpath);
+  await clickDom(page, elementHandle);
 }
 
-async function clickDom(page, domBtn) {
-  await page.evaluate((elem) => {
-    elem.click();
-  }, domBtn);
+async function clickDom(page, domElementHandle) {
+  await page.evaluate((element) => element.click(), domElementHandle);
 }
 
 async function getTextContentFromSelector(page, selector, options = {}) {
