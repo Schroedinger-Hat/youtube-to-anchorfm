@@ -187,7 +187,8 @@ async function postEpisode(youtubeVideoInfo) {
   async function skipInteractStep(page) {
     console.log('-- Going to Interact step so we can skip it');
     await clickXpath(page, '//span[text()="Next"]/parent::button');
-
+    console.log('-- Waiting before clicking next again to skip Interact step');
+    await sleepSeconds(3);
     console.log('-- Going to final step by skipping Interact step');
     await clickXpath(page, '//span[text()="Next"]/parent::button');
   }
