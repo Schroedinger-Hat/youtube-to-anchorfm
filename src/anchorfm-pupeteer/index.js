@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const env = require('../environment-variables');
 const { compareDates } = require('../dateutils');
+const { isEmpty } = require('../stringutils');
 
 function addUrlToDescription(youtubeVideoInfo) {
   return env.URL_IN_DESCRIPTION
@@ -40,43 +41,39 @@ async function setPublishDate(page, date) {
   }
 }
 
-async function setLanguageToEnglish(page) {
-  await clickSelector(page, 'button[aria-label="Change language"]');
-  await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
-}
-
 async function postEpisode(youtubeVideoInfo) {
   let browser;
+  let page;
 
   try {
     console.log('Launching puppeteer');
     browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
 
-    const page = await openPage('https://podcasters.spotify.com/pod/dashboard/episode/wizard');
+    page = await openNewPage('https://podcasters.spotify.com/pod/dashboard/episode/wizard');
 
     console.log('Setting language to English');
-    await setLanguageToEnglish(page);
+    await setLanguageToEnglish();
 
     console.log('Trying to log in');
-    await login(page);
+    await login();
 
     console.log('Opening new episode wizard');
-    await waitForNewEpisodeWizard(page);
+    await waitForNewEpisodeWizard();
 
     console.log('Uploading audio file');
-    await uploadEpisode(page);
+    await uploadEpisode();
 
     console.log('Filling required podcast details');
-    await fillRequiredDetails(page);
+    await fillRequiredDetails();
 
     console.log('Filling optional podcast details');
-    await fillOptionalDetails(page);
+    await fillOptionalDetails();
 
     console.log('Skipping Interact step');
-    await skipInteractStep(page);
+    await skipInteractStep();
 
     console.log('Save draft or publish');
-    await saveDraftOrScheduleOrPublish(page);
+    await saveDraftOrScheduleOrPublish();
 
     /*
     This is a workaround solution of the problem where the podcast
@@ -84,10 +81,15 @@ async function postEpisode(youtubeVideoInfo) {
     We navigate to the spotify/anchorfm dashboard immediately after podcast is
     published/scheduled.
      */
-    await goToDashboard(page);
+    await goToDashboard();
 
     console.log('Yay');
   } catch (err) {
+    if (page !== undefined) {
+      console.log('Screenshot base64:');
+      const screenshotBase64 = await page.screenshot({ encoding: 'base64' });
+      console.log(`data:image/png;base64,${screenshotBase64}`);
+    }
     throw new Error(`Unable to post episode to anchorfm: ${err}`);
   } finally {
     if (browser !== undefined) {
@@ -95,14 +97,19 @@ async function postEpisode(youtubeVideoInfo) {
     }
   }
 
-  async function openPage(url) {
-    const page = await browser.newPage();
-    await page.goto(url);
-    await page.setViewport({ width: 1600, height: 789 });
-    return page;
+  async function openNewPage(url) {
+    const newPage = await browser.newPage();
+    await newPage.goto(url);
+    await newPage.setViewport({ width: 1600, height: 789 });
+    return newPage;
   }
 
-  async function login(page) {
+  async function setLanguageToEnglish() {
+    await clickSelector(page, 'button[aria-label="Change language"]');
+    await clickSelector(page, 'div[aria-label="Language selection modal"] a[data-testid="language-option-en"]');
+  }
+
+  async function login() {
     console.log('-- Accessing Log in with email');
     await clickXpath(page, '//button[contains(text(), "Log in with email")]');
 
@@ -120,13 +127,13 @@ async function postEpisode(youtubeVideoInfo) {
     console.log('-- Logged in');
   }
 
-  async function waitForNewEpisodeWizard(page) {
+  async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
     console.log('-- Waiting for episode wizard to open');
     await page.waitForXPath('//span[contains(text(),"Select a file")]');
   }
 
-  async function uploadEpisode(page) {
+  async function uploadEpisode() {
     console.log('-- Uploading audio file');
     await page.waitForSelector('input[type=file]');
     const inputFile = await page.$('input[type=file]');
@@ -137,7 +144,7 @@ async function postEpisode(youtubeVideoInfo) {
     console.log('-- Audio file is uploaded');
   }
 
-  async function fillRequiredDetails(page) {
+  async function fillRequiredDetails() {
     console.log('-- Adding title');
     const titleInputSelector = '#title-input';
     await page.waitForSelector(titleInputSelector, { visible: true });
@@ -146,9 +153,14 @@ async function postEpisode(youtubeVideoInfo) {
     await page.type(titleInputSelector, youtubeVideoInfo.title);
 
     console.log('-- Adding description');
-    await page.waitForSelector('div[role="textbox"]', { visible: true });
+    const textboxInputSelector = 'div[role="textbox"]';
+    await page.waitForSelector(textboxInputSelector, { visible: true });
     const finalDescription = addUrlToDescription(youtubeVideoInfo);
-    await page.type('div[role="textbox"]', finalDescription);
+    if (isEmpty(finalDescription)) {
+      await page.type(textboxInputSelector, `Video: ${youtubeVideoInfo.url}`);
+    } else {
+      await page.type('div[role="textbox"]', finalDescription);
+    }
 
     if (env.SET_PUBLISH_DATE) {
       const dateDisplay = `${youtubeVideoInfo.uploadDate.day} ${youtubeVideoInfo.uploadDate.monthAsFullWord}, ${youtubeVideoInfo.uploadDate.year}`;
@@ -166,7 +178,7 @@ async function postEpisode(youtubeVideoInfo) {
     await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
   }
 
-  async function fillOptionalDetails(page) {
+  async function fillOptionalDetails() {
     console.log('-- Clicking Additional Details');
     await clickXpath(page, '//button[contains(text(), "Additional details")]');
 
@@ -184,16 +196,16 @@ async function postEpisode(youtubeVideoInfo) {
     }
   }
 
-  async function skipInteractStep(page) {
+  async function skipInteractStep() {
     console.log('-- Going to Interact step so we can skip it');
     await clickXpath(page, '//span[text()="Next"]/parent::button');
     console.log('-- Waiting before clicking next again to skip Interact step');
-    await sleepSeconds(3);
+    await sleepSeconds(1);
     console.log('-- Going to final step by skipping Interact step');
     await clickXpath(page, '//span[text()="Next"]/parent::button');
   }
 
-  async function saveDraftOrScheduleOrPublish(page) {
+  async function saveDraftOrScheduleOrPublish() {
     if (env.SAVE_AS_DRAFT) {
       console.log('-- Saving draft');
       await clickSelector(page, 'header > button > span');
@@ -209,7 +221,7 @@ async function postEpisode(youtubeVideoInfo) {
     await sleepSeconds(3);
   }
 
-  async function goToDashboard(page) {
+  async function goToDashboard() {
     await page.goto('https://podcasters.spotify.com/pod/dashboard/episodes');
     await sleepSeconds(3);
   }
