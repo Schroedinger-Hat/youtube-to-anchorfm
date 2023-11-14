@@ -110,8 +110,8 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function login() {
-    console.log('-- Accessing Log in with email');
-    await clickXpath(page, '//button[contains(text(), "Log in with email")]');
+    console.log('-- Accessing Spotify for Podcasters login page');
+    await clickXpath(page, '//button[contains(text(), "Continue")]');
 
     console.log('-- Logging in');
     /* The reason for the wait is because
