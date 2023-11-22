@@ -110,7 +110,7 @@ async function postEpisode(youtubeVideoInfo) {
   async function acceptDefaultCookies() {
     try {
       await clickSelector(page, '#onetrust-pc-btn-handler', env.COOKIE_TIMEOUT);
-      await clickSelector(page, '.save-preference-btn-handler.onetrust-close-btn-handler', env.UPLOAD_TIMEOUT);
+      await clickSelector(page, '.save-preference-btn-handler.onetrust-close-btn-handler', env.COOKIE_TIMEOUT);
     } catch (err) {
       console.log('Cookie already accepted or not UE based user');
     }
