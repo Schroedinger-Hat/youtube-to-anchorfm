@@ -36,7 +36,7 @@ The action will start every time you push a change on the `episode.json` file. I
 
 The action uses a docker image built over Ubuntu. It takes some time to setup the environment before running the script.
 
-**NOTE**: For the script to run successfully its necessary for there to be at least one episode manually published on Anchor.fm, as the steps to publish on a brand new Anchor.fm account are different, and the automation will break.
+**NOTE**: For the script to run successfully it is necessary for there to be at least one episode manually published on Anchor.fm, as the steps to publish on a brand new Anchor.fm account are different, and the automation will break.
 
 ## How can I run this as a GitHub action?
 
@@ -218,7 +218,7 @@ Finally, you can do `npm start` to execute the script.
 
 Currently, you can process a full playlist (one way only) with
 
-```
+```bash
 curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3AblDmX \
     | jq '.[].contentDetails.videoId' -r \
     | tac \
