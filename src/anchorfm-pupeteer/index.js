@@ -176,6 +176,12 @@ async function postEpisode(youtubeVideoInfo) {
       ? 'input[type="radio"][id="explicit-content"]'
       : 'input[type="radio"][id="no-explicit-content"]';
     await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
+
+    console.log('-- Selection content sponsorship (sponsored or not sponsored)');
+    const selectorForSponsoredContent = env.IS_SPONSORED
+      ? 'input[type="radio"][id="sponsored-content"]'
+      : 'input[type="radio"][id="no-sponsored-content"]';
+    await clickSelector(page, selectorForSponsoredContent, { visible: true });
   }
 
   async function fillOptionalDetails() {
