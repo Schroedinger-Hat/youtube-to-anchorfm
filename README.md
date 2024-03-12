@@ -100,7 +100,15 @@ The example below convert the video to mono audio.
 
 ```yaml
 env:
-  POSTPROCESSOR_ARGS: 'ffmpeg:-ac 1'
+  POSTPROCESSOR_ARGS: 'ExtractAudio+ffmpeg:-ac 1'
+```
+
+To convert to mono audio, remove initial silence and apply fade-in:
+
+```yaml
+# remove initial silence quieter than -50dB
+env:
+  POSTPROCESSOR_ARGS: "ExtractAudio+ffmpeg:-ac 1 -af silenceremove=1:0:-50dB,afade=t=in:d=5"
 ```
 
 ### Explicit Mode
