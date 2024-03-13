@@ -4,8 +4,11 @@ const dotenv = require('dotenv');
 const defaultValues = {
   EPISODE_PATH: '.',
   EPISODE_FILE: 'episode.json',
+  ANCHOR_LOGIN: true,
   ANCHOR_EMAIL: '',
   ANCHOR_PASSWORD: '',
+  SPOTIFY_EMAIL: '',
+  SPOTIFY_PASSWORD: '',
   UPLOAD_TIMEOUT: 60 * 5 * 1000,
   SAVE_AS_DRAFT: false,
   LOAD_THUMBNAIL: false,
@@ -63,8 +66,11 @@ function getCompleteEpisodePath() {
 
 module.exports = {
   EPISODE_PATH: getCompleteEpisodePath(),
+  ANCHOR_LOGIN: getBoolean(getEnvironmentVariable('ANCHOR_LOGIN')),
   ANCHOR_EMAIL: getEnvironmentVariable('ANCHOR_EMAIL'),
   ANCHOR_PASSWORD: getEnvironmentVariable('ANCHOR_PASSWORD'),
+  SPOTIFY_EMAIL: getEnvironmentVariable('SPOTIFY_EMAIL'),
+  SPOTIFY_PASSWORD: getEnvironmentVariable('SPOTIFY_PASSWORD'),
   UPLOAD_TIMEOUT: getEnvironmentVariable('UPLOAD_TIMEOUT'),
   SAVE_AS_DRAFT: getBoolean(getEnvironmentVariable('SAVE_AS_DRAFT')),
   LOAD_THUMBNAIL: getBoolean(getEnvironmentVariable('LOAD_THUMBNAIL')),

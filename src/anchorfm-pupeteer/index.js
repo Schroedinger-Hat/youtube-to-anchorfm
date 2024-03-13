@@ -110,6 +110,14 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function login() {
+    if (env.ANCHOR_LOGIN) {
+      await anchorLogin();
+    } else {
+      await spotifyLogin();
+    }
+  }
+
+  async function anchorLogin() {
     console.log('-- Accessing Spotify for Podcasters login page');
     await clickXpath(page, '//button[contains(text(), "Continue")]');
 
@@ -127,6 +135,21 @@ async function postEpisode(youtubeVideoInfo) {
     console.log('-- Logged in');
   }
 
+  async function spotifyLogin() {
+    console.log('-- Accessing new Spotify login page for podcasts');
+    await clickXpath(page, '//span[contains(text(), "Continue with Spotify")]/parent::button');
+    console.log('-- Logging in');
+    
+    await page.waitForSelector('#login-username');
+    await page.type('#login-username', env.SPOTIFY_EMAIL);
+    await page.type('#login-password', env.SPOTIFY_PASSWORD);
+    await sleepSeconds(1);
+    await clickSelector(page, 'button[id="login-button"]');
+    await clickSelector(page, 'button[data-testid="auth-accept"]');
+    await page.waitForNavigation();
+    console.log('-- In the app');
+  }
+  
   async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
     console.log('-- Waiting for episode wizard to open');
