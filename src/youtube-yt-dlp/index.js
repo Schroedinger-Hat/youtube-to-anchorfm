@@ -41,7 +41,7 @@ function getDownloadAudioOptions() {
 function getDownloadVideoOptions() {
   const options = {
     ...youtubeDlOptions,
-    f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
+    f: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
     forceOverwrites: true,
   };
   if (env.POSTPROCESSOR_ARGS.length > 0) {
