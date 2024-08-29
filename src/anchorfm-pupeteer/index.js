@@ -213,8 +213,9 @@ async function postEpisode(youtubeVideoInfo) {
 
     if (env.LOAD_THUMBNAIL) {
       console.log('-- Uploading episode art');
-      await page.waitForSelector('input[type=file][accept="image/*"]');
-      const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
+      const imageUploadInputSelector = 'input[type="file"][accept*="image"]';
+      await page.waitForSelector(imageUploadInputSelector);
+      const inputEpisodeArt = await page.$(imageUploadInputSelector);
       await inputEpisodeArt.uploadFile(env.THUMBNAIL_FILE);
 
       console.log('-- Saving uploaded episode art');
