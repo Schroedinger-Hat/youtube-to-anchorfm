@@ -22,8 +22,6 @@ RUN apt-get update && apt-get install -y nodejs  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-WORKDIR /app
-
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them
@@ -39,7 +37,7 @@ COPY package.json .
 COPY entrypoint.sh .
 COPY episode.json .
 
-RUN chmod 777 entrypoint.sh
+RUN chmod 777 /entrypoint.sh
 ENV LC_ALL=en_US.UTF-8
 
-ENTRYPOINT [ "sh", "entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
