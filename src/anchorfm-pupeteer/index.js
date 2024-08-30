@@ -36,8 +36,8 @@ async function setPublishDate(page, date) {
 
   async function selectCorrectDayInDatePicker() {
     const dayWithoutLeadingZero = parseInt(date.day, 10);
-    const dayXpath = `//div[contains(@class, "CalendarMonth") and @data-visible="true"]//td[contains(text(), "${dayWithoutLeadingZero}")]`;
-    await clickXpath(page, dayXpath);
+    const daySelector = `::-p-xpath(//div[contains(@class, "CalendarMonth") and @data-visible="true"]//td[contains(text(), "${dayWithoutLeadingZero}")])`;
+    await clickSelector(page, daySelector);
   }
 }
 
@@ -119,7 +119,7 @@ async function postEpisode(youtubeVideoInfo) {
 
   async function anchorLogin() {
     console.log('-- Accessing Spotify for Podcasters login page');
-    await clickXpath(page, '//button[contains(text(), "Continue")]');
+    await clickSelector(page, '::-p-xpath(//button[contains(text(), "Continue")])');
 
     console.log('-- Logging in');
     /* The reason for the wait is because
@@ -137,7 +137,7 @@ async function postEpisode(youtubeVideoInfo) {
 
   async function spotifyLogin() {
     console.log('-- Accessing new Spotify login page for podcasts');
-    await clickXpath(page, '//span[contains(text(), "Continue with Spotify")]/parent::button');
+    await clickSelector(page, '::-p-xpath(//span[contains(text(), "Continue with Spotify")]/parent::button)');
     console.log('-- Logging in');
     
     await page.waitForSelector('#login-username');
@@ -153,7 +153,7 @@ async function postEpisode(youtubeVideoInfo) {
   async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
     console.log('-- Waiting for episode wizard to open');
-    await page.waitForXPath('//span[contains(text(),"Select a file")]');
+    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Select a file")])');
   }
 
   async function uploadEpisode() {
@@ -163,7 +163,7 @@ async function postEpisode(youtubeVideoInfo) {
     await inputFile.uploadFile(env.AUDIO_FILE);
 
     console.log('-- Waiting for upload to finish');
-    await page.waitForXPath('//span[contains(text(),"Preview ready!")]', { timeout: env.UPLOAD_TIMEOUT });
+    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Preview ready!")])', { timeout: env.UPLOAD_TIMEOUT });
     console.log('-- Audio file is uploaded');
   }
 
@@ -209,43 +209,43 @@ async function postEpisode(youtubeVideoInfo) {
 
   async function fillOptionalDetails() {
     console.log('-- Clicking Additional Details');
-    await clickXpath(page, '//button[contains(text(), "Additional details")]');
+    await clickSelector(page, '::-p-xpath(//button[contains(text(), "Additional details")])');
 
     if (env.LOAD_THUMBNAIL) {
       console.log('-- Uploading episode art');
-      await page.waitForSelector('input[type=file][accept="image/*"]');
-      const inputEpisodeArt = await page.$('input[type=file][accept="image/*"]');
+      const imageUploadInputSelector = 'input[type="file"][accept*="image"]';
+      await page.waitForSelector(imageUploadInputSelector);
+      const inputEpisodeArt = await page.$(imageUploadInputSelector);
       await inputEpisodeArt.uploadFile(env.THUMBNAIL_FILE);
 
       console.log('-- Saving uploaded episode art');
-      await clickXpath(page, '//span[text()="Save"]/parent::button');
+      await clickSelector(page, '::-p-xpath(//span[text()="Save"]/parent::button)');
 
       console.log('-- Waiting for uploaded episode art to be saved');
-      await page.waitForXPath('//div[@aria-label="image uploader"]', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
+      await page.waitForSelector('::-p-xpath(//div[@aria-label="image uploader"])', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
     }
   }
 
   async function skipInteractStep() {
     console.log('-- Going to Interact step so we can skip it');
-    await clickXpath(page, '//span[text()="Next"]/parent::button');
+    await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
     console.log('-- Waiting before clicking next again to skip Interact step');
     await sleepSeconds(1);
     console.log('-- Going to final step by skipping Interact step');
-    await clickXpath(page, '//span[text()="Next"]/parent::button');
+    await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
   }
 
   async function saveDraftOrScheduleOrPublish() {
     if (env.SAVE_AS_DRAFT) {
       console.log('-- Saving draft');
       await clickSelector(page, 'header > button > span');
-      await page.waitForNavigation();
-      await clickXpath(page, '//span[text()="Save draft"]/parent::button');
+      await clickSelector(page, '::-p-xpath(//span[text()="Save draft"]/parent::button)');
     } else if (env.SET_PUBLISH_DATE) {
       console.log('-- Scheduling');
-      await clickXpath(page, '//span[text()="Schedule"]/parent::button');
+      await clickSelector(page, '::-p-xpath(//span[text()="Schedule"]/parent::button)');
     } else {
       console.log('-- Publishing');
-      await clickXpath(page, '//span[text()="Publish"]/parent::button');
+      await clickSelector(page, '::-p-xpath(//span[text()="Publish"]/parent::button)');
     }
     await sleepSeconds(3);
   }
@@ -265,12 +265,6 @@ async function sleepSeconds(seconds) {
 async function clickSelector(page, selector, options = {}) {
   await page.waitForSelector(selector, options);
   const elementHandle = await page.$(selector);
-  await clickDom(page, elementHandle);
-}
-
-async function clickXpath(page, xpath, options = {}) {
-  await page.waitForXPath(xpath, options);
-  const [elementHandle] = await page.$x(xpath);
   await clickDom(page, elementHandle);
 }
 

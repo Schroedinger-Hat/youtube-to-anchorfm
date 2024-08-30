@@ -1,6 +1,29 @@
-node_modules
+### Project-specific ###
 *.mp4
 *.m4a
 *.webm
-dist/episode*
+*.mp3
+*.jpg
 .env
+
+### Node ###
+node_modules
+dist
+
+### IntelliJ IDEA ###
+.idea/*
+*.iws
+*.iml
+*.ipr
+out/
+clipsjni-java/src/main/generated/
+!**/src/main/**/out/
+!**/src/test/**/out/
+!/.idea/codeStyles
+!/.idea/copyright
+
+### VS Code ###
+.vscode/
+
+### Mac ###
+.DS_Store
