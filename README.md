@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.4.0
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.5.0
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
@@ -212,7 +212,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.0.0
+        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.5.0
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL_GREATNEWS}}  # OR secrets.ANCHOR_EMAIL_SADNEWS 
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD_GREATNEWS }}  # OR secrets.ANCHOR_PASSWORD_SADNEWS

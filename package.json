@@ -1,6 +1,6 @@
 {
   "name": "youtube-to-anchorfm",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "description": "Github action and general-purpose tool to publish youtube video as anchorfm episode",
   "main": "src/index.js",
   "scripts": {
