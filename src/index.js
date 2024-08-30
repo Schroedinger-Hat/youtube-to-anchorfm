@@ -5,19 +5,25 @@ const env = require('./environment-variables');
 const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
 const { postEpisode } = require('./anchorfm-pupeteer');
 
-function validateYoutubeVideoId(json) {
-  if (json.id === undefined || json.id === null || typeof json.id !== 'string') {
+function validateYoutubeVideoId(id) {
+  if (id === undefined || id === null || typeof id !== 'string') {
     throw new Error('Id not present in JSON');
   }
 }
 
 function getYoutubeVideoId() {
   try {
+    if (env.EPISODE_ID) {
+      validateYoutubeVideoId(env.EPISODE_ID);
+      return env.EPISODE_ID;
+    }
     const json = JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8'));
-    validateYoutubeVideoId(json);
+    validateYoutubeVideoId(json.id);
     return json.id;
   } catch (err) {
-    throw new Error(`Unable to get youtube video id: ${err}`);
+    throw new Error(`Unable to get youtube video id: ${err}, 
+    please make sure that either the environment variable EPISODE_ID is set with valid id 
+    or episode path is set correctly using t he environment variables EPISODE_PATH and EPISODE_FILE`);
   }
 }
 
