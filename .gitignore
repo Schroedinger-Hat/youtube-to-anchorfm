@@ -5,6 +5,7 @@
 *.mp3
 *.jpg
 .env
+logs
 
 ### Node ###
 node_modules

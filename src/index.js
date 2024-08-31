@@ -1,9 +1,12 @@
 const fs = require('fs');
 const { exit } = require('process');
 
+const { configureLogger, getLogger, shutdownLogger } = require('./logger');
 const env = require('./environment-variables');
 const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
 const { postEpisode } = require('./anchorfm-pupeteer');
+
+const logger = getLogger();
 
 function validateYoutubeVideoId(id) {
   if (id === undefined || id === null || typeof id !== 'string') {
@@ -32,19 +35,22 @@ async function main() {
 
   const youtubeVideoInfo = await getVideoInfo(youtubeVideoId);
   const { title, description, uploadDate } = youtubeVideoInfo;
-  console.log(`title: ${title}`);
-  console.log(`description: ${description}`);
-  console.log(`Upload date: ${JSON.stringify(uploadDate)}`);
+  logger.info(`title: ${title}`);
+  logger.info(`description: ${description}`);
+  logger.info(`Upload date: ${JSON.stringify(uploadDate)}`);
 
   await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
 
-  console.log('Posting episode to anchorfm');
+  logger.info('Posting episode to anchorfm');
   await postEpisode(youtubeVideoInfo);
 }
 
+configureLogger();
+
 main()
-  .then(() => console.log('Finished successfully.'))
+  .then(() => logger.info('Finished successfully.'))
   .catch((err) => {
-    console.error(err);
+    logger.info(err);
     exit(1);
-  });
+  })
+  .finally(() => shutdownLogger());
