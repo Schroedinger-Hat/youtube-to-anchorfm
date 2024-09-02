@@ -6,6 +6,8 @@ const { getLogger } = require('../logger');
 
 const logger = getLogger();
 
+const CONNECTION_TIMEOUT_IN_MS = 30000;
+
 const youtubeDlOptions = {
   noCheckCertificates: true,
   noWarnings: true,
@@ -44,10 +46,14 @@ function getDownloadAudioOptions() {
 async function getVideoInfo(videoId) {
   logger.info(`Getting JSON video info for video id ${videoId}`);
   try {
-    const result = await youtubedl(getVideoUrl(videoId), {
-      ...youtubeDlOptions,
-      dumpSingleJson: true,
-    });
+    const result = await youtubedl(
+      getVideoUrl(videoId),
+      {
+        ...youtubeDlOptions,
+        dumpSingleJson: true,
+      },
+      { timeout: CONNECTION_TIMEOUT_IN_MS }
+    );
     return {
       title: result.title,
       description: result.description,
@@ -62,7 +68,7 @@ async function getVideoInfo(videoId) {
 async function downloadThumbnail(videoId) {
   logger.info(`Downloading thumbnail for video id ${videoId}`);
   try {
-    await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions());
+    await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions(), { timeout: CONNECTION_TIMEOUT_IN_MS });
     logger.info(`Downloaded thumbnail for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download video thumbnail: ${err}`);
@@ -72,7 +78,7 @@ async function downloadThumbnail(videoId) {
 async function downloadAudio(videoId) {
   logger.info(`Downloading audio for video id ${videoId}`);
   try {
-    await youtubedl(getVideoUrl(videoId), getDownloadAudioOptions());
+    await youtubedl(getVideoUrl(videoId), getDownloadAudioOptions(), { timeout: CONNECTION_TIMEOUT_IN_MS });
     logger.info(`Downloaded audio for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download audio: ${err}`);
