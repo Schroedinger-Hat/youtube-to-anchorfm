@@ -35,6 +35,7 @@ async function setPublishDate(page, date) {
     while (currentDate !== dateForComparison) {
       await clickSelector(page, navigationButtonSelector);
       currentDate = await getTextContentFromSelector(page, currentDateCaptionElementSelector);
+      await sleepSeconds(0.5);
     }
   }
 
