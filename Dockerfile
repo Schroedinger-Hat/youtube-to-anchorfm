@@ -26,8 +26,8 @@ RUN apt-get update && apt-get install -y nodejs  \
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them
 # into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+RUN --mount=type=bind,source=package.json,target=/package.json \
+    --mount=type=bind,source=package-lock.json,target=/package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
