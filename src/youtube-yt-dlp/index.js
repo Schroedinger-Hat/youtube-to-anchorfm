@@ -68,7 +68,7 @@ async function getVideoInfo(videoId) {
 async function downloadThumbnail(videoId) {
   logger.info(`Downloading thumbnail for video id ${videoId}`);
   try {
-    await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions(), { timeout: CONNECTION_TIMEOUT_IN_MS });
+    await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions());
     logger.info(`Downloaded thumbnail for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download video thumbnail: ${err}`);
@@ -78,7 +78,7 @@ async function downloadThumbnail(videoId) {
 async function downloadAudio(videoId) {
   logger.info(`Downloading audio for video id ${videoId}`);
   try {
-    await youtubedl(getVideoUrl(videoId), getDownloadAudioOptions(), { timeout: CONNECTION_TIMEOUT_IN_MS });
+    await youtubedl(getVideoUrl(videoId), getDownloadAudioOptions());
     logger.info(`Downloaded audio for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download audio: ${err}`);
