@@ -5,6 +5,7 @@ const { compareDates } = require('../dateutils');
 const { isEmpty } = require('../stringutils');
 const { LOGS_LOCATION, getLogger } = require('../logger');
 
+const SPOTIFY_AUTH_ACCEPTED = 'spotify-auth-accepted';
 const logger = getLogger();
 
 function addUrlToDescription(youtubeVideoInfo) {
@@ -59,11 +60,8 @@ async function postEpisode(youtubeVideoInfo) {
     logger.info('Setting language to English');
     await setLanguageToEnglish();
 
-    logger.info('Trying to log in');
-    await login();
-
-    logger.info('Opening new episode wizard');
-    await waitForNewEpisodeWizard();
+    logger.info('Trying to log in and open episode wizard');
+    await loginAndWaitForNewEpisodeWizard();
 
     logger.info('Uploading audio file');
     await uploadEpisode();
@@ -117,12 +115,20 @@ async function postEpisode(youtubeVideoInfo) {
     await clickSelector(page, '[data-testid="language-option-en"]');
   }
 
-  async function login() {
+  async function loginAndWaitForNewEpisodeWizard() {
     if (env.ANCHOR_LOGIN) {
       await anchorLogin();
     } else {
       await spotifyLogin();
     }
+    return Promise.any([acceptSpotifyAuth(), waitForNewEpisodeWizard()]).then((res) => {
+      if (res === SPOTIFY_AUTH_ACCEPTED) {
+        logger.info('-- Spotify auth accepted. Waiting for episode wizard to open again.');
+        return waitForNewEpisodeWizard();
+      }
+      logger.info('-- No need to accept spotify auth');
+      return Promise.resolve();
+    });
   }
 
   async function anchorLogin() {
@@ -139,8 +145,6 @@ async function postEpisode(youtubeVideoInfo) {
     await page.type('#email', env.ANCHOR_EMAIL);
     await page.type('#password', env.ANCHOR_PASSWORD);
     await clickSelector(page, 'button[type=submit]');
-    await page.waitForNavigation();
-    logger.info('-- Logged in');
   }
 
   async function spotifyLogin() {
@@ -153,15 +157,19 @@ async function postEpisode(youtubeVideoInfo) {
     await page.type('#login-password', env.SPOTIFY_PASSWORD);
     await sleepSeconds(1);
     await clickSelector(page, 'button[id="login-button"]');
-    await clickSelector(page, 'button[data-testid="auth-accept"]');
-    await page.waitForNavigation();
-    logger.info('-- In the app');
+  }
+
+  function acceptSpotifyAuth() {
+    logger.info('-- Trying to accepting spotify auth');
+    return clickSelector(page, 'button[data-testid="auth-accept"]').then(() => SPOTIFY_AUTH_ACCEPTED);
   }
   
   async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
     logger.info('-- Waiting for episode wizard to open');
-    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Select a file")])');
+    return page.waitForSelector('::-p-xpath(//span[contains(text(),"Select a file")])').then(() => {
+      logger.info('-- Episode wizard is opened');
+    });
   }
 
   async function uploadEpisode() {
