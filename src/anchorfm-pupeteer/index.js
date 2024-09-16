@@ -151,7 +151,7 @@ async function postEpisode(youtubeVideoInfo) {
     logger.info('-- Accessing new Spotify login page for podcasts');
     await clickSelector(page, '::-p-xpath(//span[contains(text(), "Continue with Spotify")]/parent::button)');
     logger.info('-- Logging in');
-    
+
     await page.waitForSelector('#login-username');
     await page.type('#login-username', env.SPOTIFY_EMAIL);
     await page.type('#login-password', env.SPOTIFY_PASSWORD);
@@ -163,7 +163,7 @@ async function postEpisode(youtubeVideoInfo) {
     logger.info('-- Trying to accepting spotify auth');
     return clickSelector(page, 'button[data-testid="auth-accept"]').then(() => SPOTIFY_AUTH_ACCEPTED);
   }
-  
+
   async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
     logger.info('-- Waiting for episode wizard to open');
@@ -179,7 +179,9 @@ async function postEpisode(youtubeVideoInfo) {
     await inputFile.uploadFile(env.AUDIO_FILE);
 
     logger.info('-- Waiting for upload to finish');
-    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Preview ready!")])', { timeout: env.UPLOAD_TIMEOUT });
+    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Preview ready!")])', {
+      timeout: env.UPLOAD_TIMEOUT,
+    });
     logger.info('-- Audio file is uploaded');
   }
 
@@ -238,7 +240,10 @@ async function postEpisode(youtubeVideoInfo) {
       await clickSelector(page, '::-p-xpath(//span[text()="Save"]/parent::button)');
 
       logger.info('-- Waiting for uploaded episode art to be saved');
-      await page.waitForSelector('::-p-xpath(//div[@aria-label="image uploader"])', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
+      await page.waitForSelector('::-p-xpath(//div[@aria-label="image uploader"])', {
+        hidden: true,
+        timeout: env.UPLOAD_TIMEOUT,
+      });
     }
   }
 
