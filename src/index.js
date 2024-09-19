@@ -1,23 +1,32 @@
 const fs = require('fs');
 const { exit } = require('process');
 
+const { configureLogger, getLogger, shutdownLogger } = require('./logger');
 const env = require('./environment-variables');
 const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
 const { postEpisode } = require('./anchorfm-pupeteer');
 
-function validateYoutubeVideoId(json) {
-  if (json.id === undefined || json.id === null || typeof json.id !== 'string') {
+const logger = getLogger();
+
+function validateYoutubeVideoId(id) {
+  if (id === undefined || id === null || typeof id !== 'string') {
     throw new Error('Id not present in JSON');
   }
 }
 
 function getYoutubeVideoId() {
   try {
+    if (env.EPISODE_ID) {
+      validateYoutubeVideoId(env.EPISODE_ID);
+      return env.EPISODE_ID;
+    }
     const json = JSON.parse(fs.readFileSync(env.EPISODE_PATH, 'utf-8'));
-    validateYoutubeVideoId(json);
+    validateYoutubeVideoId(json.id);
     return json.id;
   } catch (err) {
-    throw new Error(`Unable to get youtube video id: ${err}`);
+    throw new Error(`Unable to get youtube video id: ${err}, 
+    please make sure that either the environment variable EPISODE_ID is set with valid id 
+    or episode path is set correctly using t he environment variables EPISODE_PATH and EPISODE_FILE`);
   }
 }
 
@@ -26,19 +35,22 @@ async function main() {
 
   const youtubeVideoInfo = await getVideoInfo(youtubeVideoId);
   const { title, description, uploadDate } = youtubeVideoInfo;
-  console.log(`title: ${title}`);
-  console.log(`description: ${description}`);
-  console.log(`Upload date: ${JSON.stringify(uploadDate)}`);
+  logger.info(`title: ${title}`);
+  logger.info(`description: ${description}`);
+  logger.info(`Upload date: ${JSON.stringify(uploadDate)}`);
 
   await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
 
-  console.log('Posting episode to anchorfm');
+  logger.info('Posting episode to anchorfm');
   await postEpisode(youtubeVideoInfo);
 }
 
+configureLogger();
+
 main()
-  .then(() => console.log('Finished successfully.'))
+  .then(() => logger.info('Finished successfully.'))
   .catch((err) => {
-    console.error(err);
+    logger.info(err);
     exit(1);
-  });
+  })
+  .finally(() => shutdownLogger());

@@ -2,6 +2,11 @@ const youtubedl = require('youtube-dl-exec');
 const env = require('../environment-variables');
 const { AUDIO_FILE_FORMAT, THUMBNAIL_FILE_FORMAT } = require('../environment-variables');
 const { parseDate } = require('../dateutils');
+const { getLogger } = require('../logger');
+
+const logger = getLogger();
+
+const CONNECTION_TIMEOUT_IN_MS = 30000;
 
 const youtubeDlOptions = {
   noCheckCertificates: true,
@@ -39,12 +44,16 @@ function getDownloadAudioOptions() {
 }
 
 async function getVideoInfo(videoId) {
-  console.log(`Getting JSON video info for video id ${videoId}`);
+  logger.info(`Getting JSON video info for video id ${videoId}`);
   try {
-    const result = await youtubedl(getVideoUrl(videoId), {
-      ...youtubeDlOptions,
-      dumpSingleJson: true,
-    });
+    const result = await youtubedl(
+      getVideoUrl(videoId),
+      {
+        ...youtubeDlOptions,
+        dumpSingleJson: true,
+      },
+      { timeout: CONNECTION_TIMEOUT_IN_MS }
+    );
     return {
       title: result.title,
       description: result.description,
@@ -57,20 +66,20 @@ async function getVideoInfo(videoId) {
 }
 
 async function downloadThumbnail(videoId) {
-  console.log(`Downloading thumbnail for video id ${videoId}`);
+  logger.info(`Downloading thumbnail for video id ${videoId}`);
   try {
     await youtubedl(getVideoUrl(videoId), getDownloadThumbnailOptions());
-    console.log(`Downloaded thumbnail for video id ${videoId}`);
+    logger.info(`Downloaded thumbnail for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download video thumbnail: ${err}`);
   }
 }
 
 async function downloadAudio(videoId) {
-  console.log(`Downloading audio for video id ${videoId}`);
+  logger.info(`Downloading audio for video id ${videoId}`);
   try {
     await youtubedl(getVideoUrl(videoId), getDownloadAudioOptions());
-    console.log(`Downloaded audio for video id ${videoId}`);
+    logger.info(`Downloaded audio for video id ${videoId}`);
   } catch (err) {
     throw new Error(`Unable to download audio: ${err}`);
   }

@@ -1,7 +1,12 @@
+const path = require('node:path');
 const puppeteer = require('puppeteer');
 const env = require('../environment-variables');
 const { compareDates } = require('../dateutils');
 const { isEmpty } = require('../stringutils');
+const { LOGS_LOCATION, getLogger } = require('../logger');
+
+const SPOTIFY_AUTH_ACCEPTED = 'spotify-auth-accepted';
+const logger = getLogger();
 
 function addUrlToDescription(youtubeVideoInfo) {
   return env.URL_IN_DESCRIPTION
@@ -10,7 +15,7 @@ function addUrlToDescription(youtubeVideoInfo) {
 }
 
 async function setPublishDate(page, date) {
-  console.log('-- Setting publish date');
+  logger.info('-- Setting publish date');
   await clickSelector(page, 'input[type="radio"][id="publish-date-schedule"]');
   await page.waitForSelector('#date-input', { visible: true });
   await clickSelector(page, '#date-input');
@@ -31,6 +36,7 @@ async function setPublishDate(page, date) {
     while (currentDate !== dateForComparison) {
       await clickSelector(page, navigationButtonSelector);
       currentDate = await getTextContentFromSelector(page, currentDateCaptionElementSelector);
+      await sleepSeconds(0.5);
     }
   }
 
@@ -46,33 +52,30 @@ async function postEpisode(youtubeVideoInfo) {
   let page;
 
   try {
-    console.log('Launching puppeteer');
+    logger.info('Launching puppeteer');
     browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
 
     page = await openNewPage('https://podcasters.spotify.com/pod/dashboard/episode/wizard');
 
-    console.log('Setting language to English');
+    logger.info('Setting language to English');
     await setLanguageToEnglish();
 
-    console.log('Trying to log in');
-    await login();
+    logger.info('Trying to log in and open episode wizard');
+    await loginAndWaitForNewEpisodeWizard();
 
-    console.log('Opening new episode wizard');
-    await waitForNewEpisodeWizard();
-
-    console.log('Uploading audio file');
+    logger.info('Uploading audio file');
     await uploadEpisode();
 
-    console.log('Filling required podcast details');
+    logger.info('Filling required podcast details');
     await fillRequiredDetails();
 
-    console.log('Filling optional podcast details');
+    logger.info('Filling optional podcast details');
     await fillOptionalDetails();
 
-    console.log('Skipping Interact step');
+    logger.info('Skipping Interact step');
     await skipInteractStep();
 
-    console.log('Save draft or publish');
+    logger.info('Save draft or publish');
     await saveDraftOrScheduleOrPublish();
 
     /*
@@ -83,12 +86,15 @@ async function postEpisode(youtubeVideoInfo) {
      */
     await goToDashboard();
 
-    console.log('Yay');
+    logger.info('Yay');
   } catch (err) {
     if (page !== undefined) {
-      console.log('Screenshot base64:');
-      const screenshotBase64 = await page.screenshot({ encoding: 'base64' });
-      console.log(`data:image/png;base64,${screenshotBase64}`);
+      logger.info('Screenshot base64:');
+      const screenshotBinary = await page.screenshot({
+        type: 'png',
+        path: path.join(LOGS_LOCATION, 'screenshot.png'),
+      });
+      logger.info(`data:image/png;base64,${Buffer.from(screenshotBinary).toString('base64')}`);
     }
     throw new Error(`Unable to post episode to anchorfm: ${err}`);
   } finally {
@@ -109,19 +115,27 @@ async function postEpisode(youtubeVideoInfo) {
     await clickSelector(page, '[data-testid="language-option-en"]');
   }
 
-  async function login() {
+  async function loginAndWaitForNewEpisodeWizard() {
     if (env.ANCHOR_LOGIN) {
       await anchorLogin();
     } else {
       await spotifyLogin();
     }
+    return Promise.any([acceptSpotifyAuth(), waitForNewEpisodeWizard()]).then((res) => {
+      if (res === SPOTIFY_AUTH_ACCEPTED) {
+        logger.info('-- Spotify auth accepted. Waiting for episode wizard to open again.');
+        return waitForNewEpisodeWizard();
+      }
+      logger.info('-- No need to accept spotify auth');
+      return Promise.resolve();
+    });
   }
 
   async function anchorLogin() {
-    console.log('-- Accessing Spotify for Podcasters login page');
+    logger.info('-- Accessing Spotify for Podcasters login page');
     await clickSelector(page, '::-p-xpath(//button[contains(text(), "Continue")])');
 
-    console.log('-- Logging in');
+    logger.info('-- Logging in');
     /* The reason for the wait is because
     anchorfm can take a little longer to load the form for logging in
     and because pupeteer treats the page as loaded(or navigated to)
@@ -131,51 +145,55 @@ async function postEpisode(youtubeVideoInfo) {
     await page.type('#email', env.ANCHOR_EMAIL);
     await page.type('#password', env.ANCHOR_PASSWORD);
     await clickSelector(page, 'button[type=submit]');
-    await page.waitForNavigation();
-    console.log('-- Logged in');
   }
 
   async function spotifyLogin() {
-    console.log('-- Accessing new Spotify login page for podcasts');
+    logger.info('-- Accessing new Spotify login page for podcasts');
     await clickSelector(page, '::-p-xpath(//span[contains(text(), "Continue with Spotify")]/parent::button)');
-    console.log('-- Logging in');
-    
+    logger.info('-- Logging in');
+
     await page.waitForSelector('#login-username');
     await page.type('#login-username', env.SPOTIFY_EMAIL);
     await page.type('#login-password', env.SPOTIFY_PASSWORD);
     await sleepSeconds(1);
     await clickSelector(page, 'button[id="login-button"]');
-    await clickSelector(page, 'button[data-testid="auth-accept"]');
-    await page.waitForNavigation();
-    console.log('-- In the app');
   }
-  
+
+  function acceptSpotifyAuth() {
+    logger.info('-- Trying to accepting spotify auth');
+    return clickSelector(page, 'button[data-testid="auth-accept"]').then(() => SPOTIFY_AUTH_ACCEPTED);
+  }
+
   async function waitForNewEpisodeWizard() {
     await sleepSeconds(1);
-    console.log('-- Waiting for episode wizard to open');
-    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Select a file")])');
+    logger.info('-- Waiting for episode wizard to open');
+    return page.waitForSelector('::-p-xpath(//span[contains(text(),"Select a file")])').then(() => {
+      logger.info('-- Episode wizard is opened');
+    });
   }
 
   async function uploadEpisode() {
-    console.log('-- Uploading audio file');
+    logger.info('-- Uploading audio file');
     await page.waitForSelector('input[type=file]');
     const inputFile = await page.$('input[type=file]');
     await inputFile.uploadFile(env.AUDIO_FILE);
 
-    console.log('-- Waiting for upload to finish');
-    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Preview ready!")])', { timeout: env.UPLOAD_TIMEOUT });
-    console.log('-- Audio file is uploaded');
+    logger.info('-- Waiting for upload to finish');
+    await page.waitForSelector('::-p-xpath(//span[contains(text(),"Preview ready!")])', {
+      timeout: env.UPLOAD_TIMEOUT,
+    });
+    logger.info('-- Audio file is uploaded');
   }
 
   async function fillRequiredDetails() {
-    console.log('-- Adding title');
+    logger.info('-- Adding title');
     const titleInputSelector = '#title-input';
     await page.waitForSelector(titleInputSelector, { visible: true });
     // Wait some time so any field refresh doesn't mess up with our input
     await sleepSeconds(2);
     await page.type(titleInputSelector, youtubeVideoInfo.title);
 
-    console.log('-- Adding description');
+    logger.info('-- Adding description');
     const textboxInputSelector = 'div[role="textbox"]';
     await page.waitForSelector(textboxInputSelector, { visible: true });
     const finalDescription = addUrlToDescription(youtubeVideoInfo);
@@ -187,20 +205,20 @@ async function postEpisode(youtubeVideoInfo) {
 
     if (env.SET_PUBLISH_DATE) {
       const dateDisplay = `${youtubeVideoInfo.uploadDate.day} ${youtubeVideoInfo.uploadDate.monthAsFullWord}, ${youtubeVideoInfo.uploadDate.year}`;
-      console.log('-- Schedule publishing for date: ', dateDisplay);
+      logger.info('-- Schedule publishing for date: ', dateDisplay);
       await setPublishDate(page, youtubeVideoInfo.uploadDate);
     } else {
-      console.log('-- No schedule, should publish immediately');
+      logger.info('-- No schedule, should publish immediately');
       await clickSelector(page, 'input[type="radio"][id="publish-date-now"]');
     }
 
-    console.log('-- Selecting content type(explicit or no explicit)');
+    logger.info('-- Selecting content type(explicit or no explicit)');
     const selectorForExplicitContentLabel = env.IS_EXPLICIT
       ? 'input[type="radio"][id="explicit-content"]'
       : 'input[type="radio"][id="no-explicit-content"]';
     await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
 
-    console.log('-- Selection content sponsorship (sponsored or not sponsored)');
+    logger.info('-- Selection content sponsorship (sponsored or not sponsored)');
     const selectorForSponsoredContent = env.IS_SPONSORED
       ? 'input[type="radio"][id="sponsored-content"]'
       : 'input[type="radio"][id="no-sponsored-content"]';
@@ -208,43 +226,46 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function fillOptionalDetails() {
-    console.log('-- Clicking Additional Details');
+    logger.info('-- Clicking Additional Details');
     await clickSelector(page, '::-p-xpath(//button[contains(text(), "Additional details")])');
 
     if (env.LOAD_THUMBNAIL) {
-      console.log('-- Uploading episode art');
+      logger.info('-- Uploading episode art');
       const imageUploadInputSelector = 'input[type="file"][accept*="image"]';
       await page.waitForSelector(imageUploadInputSelector);
       const inputEpisodeArt = await page.$(imageUploadInputSelector);
       await inputEpisodeArt.uploadFile(env.THUMBNAIL_FILE);
 
-      console.log('-- Saving uploaded episode art');
+      logger.info('-- Saving uploaded episode art');
       await clickSelector(page, '::-p-xpath(//span[text()="Save"]/parent::button)');
 
-      console.log('-- Waiting for uploaded episode art to be saved');
-      await page.waitForSelector('::-p-xpath(//div[@aria-label="image uploader"])', { hidden: true, timeout: env.UPLOAD_TIMEOUT });
+      logger.info('-- Waiting for uploaded episode art to be saved');
+      await page.waitForSelector('::-p-xpath(//div[@aria-label="image uploader"])', {
+        hidden: true,
+        timeout: env.UPLOAD_TIMEOUT,
+      });
     }
   }
 
   async function skipInteractStep() {
-    console.log('-- Going to Interact step so we can skip it');
+    logger.info('-- Going to Interact step so we can skip it');
     await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
-    console.log('-- Waiting before clicking next again to skip Interact step');
+    logger.info('-- Waiting before clicking next again to skip Interact step');
     await sleepSeconds(1);
-    console.log('-- Going to final step by skipping Interact step');
+    logger.info('-- Going to final step by skipping Interact step');
     await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
   }
 
   async function saveDraftOrScheduleOrPublish() {
     if (env.SAVE_AS_DRAFT) {
-      console.log('-- Saving draft');
+      logger.info('-- Saving draft');
       await clickSelector(page, 'header > button > span');
       await clickSelector(page, '::-p-xpath(//span[text()="Save draft"]/parent::button)');
     } else if (env.SET_PUBLISH_DATE) {
-      console.log('-- Scheduling');
+      logger.info('-- Scheduling');
       await clickSelector(page, '::-p-xpath(//span[text()="Schedule"]/parent::button)');
     } else {
-      console.log('-- Publishing');
+      logger.info('-- Publishing');
       await clickSelector(page, '::-p-xpath(//span[text()="Publish"]/parent::button)');
     }
     await sleepSeconds(3);

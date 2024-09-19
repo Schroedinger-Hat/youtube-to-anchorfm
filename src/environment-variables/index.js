@@ -65,6 +65,7 @@ function getCompleteEpisodePath() {
 }
 
 module.exports = {
+  EPISODE_ID: getEnvironmentVariable('EPISODE_ID'),
   EPISODE_PATH: getCompleteEpisodePath(),
   ANCHOR_LOGIN: getBoolean(getEnvironmentVariable('ANCHOR_LOGIN')),
   ANCHOR_EMAIL: getEnvironmentVariable('ANCHOR_EMAIL'),

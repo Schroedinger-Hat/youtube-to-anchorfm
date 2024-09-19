@@ -10,7 +10,8 @@
   "dependencies": {
     "puppeteer": "23.2.1",
     "youtube-dl-exec": "3.0.7",
-    "dotenv": "16.4.5"
+    "dotenv": "16.4.5",
+    "log4js": "6.9.1"
   },
   "repository": {
     "type": "git",
