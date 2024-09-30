@@ -1,7 +1,7 @@
 {
-  "name": "youtube-to-anchorfm",
+  "name": "youtube-to-spotify",
   "version": "2.5.0",
-  "description": "Github action and general-purpose tool to publish youtube video as anchorfm episode",
+  "description": "Github action and general-purpose tool to publish youtube video as spotify episode",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Schrodinger-Hat/youtube-to-anchorfm.git"
+    "url": "git://github.com/Schrodinger-Hat/youtube-to-spotify.git"
   },
   "author": "thejoin",
   "license": "MIT",
   "keywords": [
-    "anchorfm",
+    "spotify",
     "youtube"
   ],
   "devDependencies": {
