@@ -4,7 +4,7 @@ const { exit } = require('process');
 const { configureLogger, getLogger, shutdownLogger } = require('./logger');
 const env = require('./environment-variables');
 const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
-const { postEpisode } = require('./anchorfm-pupeteer');
+const { postEpisode } = require('./spotify-pupeteer');
 
 const logger = getLogger();
 
@@ -41,7 +41,7 @@ async function main() {
 
   await Promise.all([downloadThumbnail(youtubeVideoId), downloadAudio(youtubeVideoId)]);
 
-  logger.info('Posting episode to anchorfm');
+  logger.info('Posting episode to spotify');
   await postEpisode(youtubeVideoInfo);
 }
 
