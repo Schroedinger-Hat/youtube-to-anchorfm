@@ -60,6 +60,9 @@ async function postEpisode(youtubeVideoInfo) {
     logger.info('Setting language to English');
     await setLanguageToEnglish();
 
+    logger.info('Set cookie banner acceptance');
+    await setAcceptedCookieBannerDate();
+
     logger.info('Trying to log in and open episode wizard');
     await loginAndWaitForNewEpisodeWizard();
 
@@ -113,6 +116,17 @@ async function postEpisode(youtubeVideoInfo) {
   async function setLanguageToEnglish() {
     await clickSelector(page, 'button[aria-label="Change language"]');
     await clickSelector(page, '[data-testid="language-option-en"]');
+  }
+
+  async function setAcceptedCookieBannerDate() {
+    try {
+      await page.setCookie({
+        name: 'OptanonAlertBoxClosed',
+        value: new Date().toISOString(),
+      });
+    } catch (e) {
+      logger.info('-- Unable to set cookie');
+    }
   }
 
   async function loginAndWaitForNewEpisodeWizard() {
