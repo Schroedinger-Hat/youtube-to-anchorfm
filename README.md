@@ -1,12 +1,12 @@
 # YouTube to Anchor.fm - An automation tool to publish your podcast
 
-![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png 'Cover image')
+![Cover image](https://raw.githubusercontent.com/schroedinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png 'Cover image')
 
 This action will upload an audio file from a given YouTube video automatically to your Anchor.fm account.
 
 It is very useful in a scenario where you have a YouTube account and also a podcast at Spotify through Anchor.fm.
 
-In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
+In our live show ([Schrödinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
 Every contribution is appreciated, even just a simple feedback.
 
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.5.0
+        uses: Schroedinger-Hat/youtube-to-anchorfm@v2.5.0
         env:
           ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
@@ -76,7 +76,7 @@ jobs:
           EPISODE_PATH: /github/workspace
 ```
 
-**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _ANCHOR_EMAIL_ and _ANCHOR_PASSWORD_. This environment variables are mandatory as they specify the sign in account. 
+**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _ANCHOR_EMAIL_ and _ANCHOR_PASSWORD_. This environment variables are mandatory as they specify the sign in account.
 
 Instead the _SPOTIFY_EMAIL_ and _SPOTIFY_PASSWORD_ are not mandatory but can still be set, if needed, and will be used for the new login form if the env variable _ANCHOR_LOGIN_ is set to false.
 
@@ -203,7 +203,7 @@ In `great-news.yaml` and `sad-news.yaml`:
 name: 'Great News Upload Action'
 on:
   push:
-    paths: 
+    paths:
     ## only updates to this file trigger this action
       - great-news.json   # or sad-news.json
 jobs:
@@ -212,9 +212,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.5.0
+        uses: schroedinger-Hat/youtube-to-anchorfm@v2.5.0
         env:
-          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL_GREATNEWS}}  # OR secrets.ANCHOR_EMAIL_SADNEWS 
+          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL_GREATNEWS}}  # OR secrets.ANCHOR_EMAIL_SADNEWS
           ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD_GREATNEWS }}  # OR secrets.ANCHOR_PASSWORD_SADNEWS
           SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL_GREATNEWS }}  # OR secrets.SPOTIFY_EMAIL_SADNEWS
           SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD_GREATNEWS }}  # OR secrets.SPOTIFY_PASSWORD_SADNEWS
@@ -280,21 +280,21 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/"><img src="https://avatars.githubusercontent.com/u/12409541?v=4?s=100" width="100px;" alt="GabrielePuliti"/><br /><sub><b>GabrielePuliti</b></sub></a><br /><a href="#design-Wabri" title="Design">🎨</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=Wabri" title="Code">💻</a> <a href="#maintenance-Wabri" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3AWabri" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="https://www.mikilombardi.com"><img src="https://avatars.githubusercontent.com/u/6616203?v=4?s=100" width="100px;" alt="Miki Lombardi"/><br /><sub><b>Miki Lombardi</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=TheJoin95" title="Code">💻</a> <a href="#maintenance-TheJoin95" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3ATheJoin95" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="habet.dev"><img src="https://avatars.githubusercontent.com/u/82916197?v=4?s=100" width="100px;" alt="Abe Hanoka"/><br /><sub><b>Abe Hanoka</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=abe-101" title="Code">💻</a> <a href="#maintenance-abe-101" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3Aabe-101" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="https://github.com/matevskial"><img src="https://avatars.githubusercontent.com/u/44746117?v=4?s=100" width="100px;" alt="matevskial"/><br /><sub><b>matevskial</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=matevskial" title="Code">💻</a> <a href="#maintenance-matevskial" title="Maintenance">🚧</a></td>
-      <td align="center"><a href="https://github.com/Amod02-prog"><img src="https://avatars.githubusercontent.com/u/83520862?v=4?s=100" width="100px;" alt="Amod Deshpande"/><br /><sub><b>Amod Deshpande</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=Amod02-prog" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/zephyrus3"><img src="https://avatars.githubusercontent.com/u/47828820?v=4?s=100" width="100px;" alt="Guilherme Costa"/><br /><sub><b>Guilherme Costa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=zephyrus3" title="Code">💻</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3Azephyrus3" title="Bug reports">🐛</a></td>
-      <td align="center"><a href="https://github.com/weltonrodrigo"><img src="https://avatars.githubusercontent.com/u/1644644?v=4?s=100" width="100px;" alt="Welton Rodrigo Torres Nascimento"/><br /><sub><b>Welton Rodrigo Torres Nascimento</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Documentation">📖</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/"><img src="https://avatars.githubusercontent.com/u/12409541?v=4?s=100" width="100px;" alt="GabrielePuliti"/><br /><sub><b>GabrielePuliti</b></sub></a><br /><a href="#design-Wabri" title="Design">🎨</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=Wabri" title="Code">💻</a> <a href="#maintenance-Wabri" title="Maintenance">🚧</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3AWabri" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="https://www.mikilombardi.com"><img src="https://avatars.githubusercontent.com/u/6616203?v=4?s=100" width="100px;" alt="Miki Lombardi"/><br /><sub><b>Miki Lombardi</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=TheJoin95" title="Code">💻</a> <a href="#maintenance-TheJoin95" title="Maintenance">🚧</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3ATheJoin95" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="habet.dev"><img src="https://avatars.githubusercontent.com/u/82916197?v=4?s=100" width="100px;" alt="Abe Hanoka"/><br /><sub><b>Abe Hanoka</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=abe-101" title="Code">💻</a> <a href="#maintenance-abe-101" title="Maintenance">🚧</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3Aabe-101" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="https://github.com/matevskial"><img src="https://avatars.githubusercontent.com/u/44746117?v=4?s=100" width="100px;" alt="matevskial"/><br /><sub><b>matevskial</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=matevskial" title="Code">💻</a> <a href="#maintenance-matevskial" title="Maintenance">🚧</a></td>
+      <td align="center"><a href="https://github.com/Amod02-prog"><img src="https://avatars.githubusercontent.com/u/83520862?v=4?s=100" width="100px;" alt="Amod Deshpande"/><br /><sub><b>Amod Deshpande</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=Amod02-prog" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/zephyrus3"><img src="https://avatars.githubusercontent.com/u/47828820?v=4?s=100" width="100px;" alt="Guilherme Costa"/><br /><sub><b>Guilherme Costa</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=zephyrus3" title="Code">💻</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/issues?q=author%3Azephyrus3" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/weltonrodrigo"><img src="https://avatars.githubusercontent.com/u/1644644?v=4?s=100" width="100px;" alt="Welton Rodrigo Torres Nascimento"/><br /><sub><b>Welton Rodrigo Torres Nascimento</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Documentation">📖</a> <a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center"><a href="https://github.com/nicpuppa"><img src="https://avatars.githubusercontent.com/u/72783243?v=4?s=100" width="100px;" alt="Nicola Puppa"/><br /><sub><b>Nicola Puppa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=nicpuppa" title="Documentation">📖</a></td>
-      <td align="center"><a href="http://matej.voboril.dev"><img src="https://avatars.githubusercontent.com/u/7128721?v=4?s=100" width="100px;" alt="Matt"/><br /><sub><b>Matt</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3ATobiTenno" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/nicpuppa"><img src="https://avatars.githubusercontent.com/u/72783243?v=4?s=100" width="100px;" alt="Nicola Puppa"/><br /><sub><b>Nicola Puppa</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/commits?author=nicpuppa" title="Documentation">📖</a></td>
+      <td align="center"><a href="http://matej.voboril.dev"><img src="https://avatars.githubusercontent.com/u/7128721?v=4?s=100" width="100px;" alt="Matt"/><br /><sub><b>Matt</b></sub></a><br /><a href="https://github.com/schroedinger-Hat/youtube-to-anchorfm/issues?q=author%3ATobiTenno" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
   <tfoot>
-    
+
   </tfoot>
 </table>
 
