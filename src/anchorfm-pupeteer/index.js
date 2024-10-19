@@ -135,6 +135,13 @@ async function postEpisode(youtubeVideoInfo) {
     } else {
       await spotifyLogin();
     }
+    try {
+      logger('-- Waiting for navigation after logging in');
+      await page.waitForNavigation();
+    } catch (err) {
+      logger.info('-- The wait for navigation after logging failed or timed-out. Continuing.');
+    }
+
     return Promise.any([acceptSpotifyAuth(), waitForNewEpisodeWizard()]).then((res) => {
       if (res === SPOTIFY_AUTH_ACCEPTED) {
         logger.info('-- Spotify auth accepted. Waiting for episode wizard to open again.');
