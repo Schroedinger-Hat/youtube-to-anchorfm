@@ -135,6 +135,12 @@ async function postEpisode(youtubeVideoInfo) {
     } else {
       await spotifyLogin();
     }
+    try {
+      await page.waitForNavigation();
+    } catch (err) {
+      /* empty */
+    }
+
     return Promise.any([acceptSpotifyAuth(), waitForNewEpisodeWizard()]).then((res) => {
       if (res === SPOTIFY_AUTH_ACCEPTED) {
         logger.info('-- Spotify auth accepted. Waiting for episode wizard to open again.');
