@@ -51,6 +51,26 @@ main()
   .then(() => logger.info('Finished successfully.'))
   .catch((err) => {
     logger.info(err);
-    exit(1);
+    exitFailure();
   })
-  .finally(() => shutdownLogger());
+  .finally(() => {
+    exitSuccess();
+  });
+
+function exitSuccess() {
+  try {
+    cleanUp();
+  } catch (err) {
+    /* empty */
+  }
+  exit(0);
+}
+
+function exitFailure() {
+  cleanUp();
+  exit(1);
+}
+
+function cleanUp() {
+  shutdownLogger();
+}
