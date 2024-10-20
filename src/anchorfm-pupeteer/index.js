@@ -181,7 +181,7 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   function acceptSpotifyAuth() {
-    logger.info('-- Trying to accepting spotify auth');
+    logger.info('-- Trying to accept spotify auth');
     return clickSelector(page, 'button[data-testid="auth-accept"]').then(() => SPOTIFY_AUTH_ACCEPTED);
   }
 
