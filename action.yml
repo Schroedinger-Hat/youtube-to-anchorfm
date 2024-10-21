@@ -1,5 +1,5 @@
-name: 'Upload Episode from YouTube To Anchor.Fm'
-description: 'An automation tool to publish your podcast from youtube to anchor.fm'
+name: 'Upload Episode from YouTube To Spotify'
+description: 'An automation tool to publish your podcast from youtube to spotify'
 branding:
   icon: 'upload-cloud'
   color: 'green'
