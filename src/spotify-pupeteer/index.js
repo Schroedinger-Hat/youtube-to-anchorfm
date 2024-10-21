@@ -158,7 +158,7 @@ async function postEpisode(youtubeVideoInfo) {
 
     logger.info('-- Logging in');
     /* The reason for the wait is because
-    spotifyfm can take a little longer to load the form for logging in
+    spotify can take a little longer to load the form for logging in
     and because pupeteer treats the page as loaded(or navigated to)
     even when the form is not showed
     */
