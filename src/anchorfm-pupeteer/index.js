@@ -194,7 +194,8 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function uploadEpisode() {
-    logger.info('-- Uploading audio file');
+    logger.info('-- Uploading audio file(waiting 5 seconds before initiating process)');
+    await sleepSeconds(5);
     await page.waitForSelector('input[type=file]');
     const inputFile = await page.$('input[type=file]');
     await inputFile.uploadFile(env.AUDIO_FILE);
