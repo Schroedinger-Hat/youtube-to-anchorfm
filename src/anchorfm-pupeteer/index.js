@@ -91,6 +91,7 @@ async function postEpisode(youtubeVideoInfo) {
 
     logger.info('Yay');
   } catch (err) {
+    logger.info(`Unable to post episode to spotify: ${err}`);
     if (page !== undefined) {
       logger.info('Screenshot base64:');
       const screenshotBinary = await page.screenshot({
