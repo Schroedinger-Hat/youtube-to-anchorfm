@@ -49,8 +49,7 @@ configureLogger();
 
 main()
   .then(() => logger.info('Finished successfully.'))
-  .catch((err) => {
-    logger.info(err);
+  .catch(() => {
     exitFailure();
   })
   .finally(() => {
