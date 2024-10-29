@@ -236,10 +236,11 @@ async function postEpisode(youtubeVideoInfo) {
     }
 
     logger.info('-- Selecting content type(explicit or no explicit)');
-    const selectorForExplicitContentLabel = env.IS_EXPLICIT
-      ? 'input[type="radio"][id="explicit-content"]'
-      : 'input[type="radio"][id="no-explicit-content"]';
-    await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
+    if (env.IS_EXPLICIT) {
+      const explicitContentCheckboxLabelSelector =
+        '::-p-xpath(//span[contains(text(), "Explicit content")]/parent::*/parent::*//label)';
+      await clickSelector(page, explicitContentCheckboxLabelSelector);
+    }
 
     logger.info('-- Selection content sponsorship (sponsored or not sponsored)');
     const selectorForSponsoredContent = env.IS_SPONSORED
