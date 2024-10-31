@@ -49,7 +49,8 @@ configureLogger();
 
 main()
   .then(() => logger.info('Finished successfully.'))
-  .catch(() => {
+  .catch((err) => {
+    logger.info(`Posting youtube episode to spotify failed: ${err}`);
     exitFailure();
   })
   .finally(() => {
