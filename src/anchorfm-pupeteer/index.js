@@ -110,7 +110,7 @@ async function postEpisode(youtubeVideoInfo) {
   async function openNewPage(url) {
     const newPage = await browser.newPage();
     await newPage.goto(url);
-    await newPage.setViewport({ width: 1600, height: 1600 });
+    await newPage.setViewport({ width: 2560, height: 1440 });
     return newPage;
   }
 
