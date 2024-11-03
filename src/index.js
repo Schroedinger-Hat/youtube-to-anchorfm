@@ -47,30 +47,27 @@ async function main() {
 
 configureLogger();
 
-main()
-  .then(() => logger.info('Finished successfully.'))
-  .catch((err) => {
-    logger.info(`Posting youtube episode to spotify failed: ${err}`);
-    exitFailure();
-  })
-  .finally(() => {
-    exitSuccess();
-  });
+try {
+  await main();
+  logger.info('Finished successfully.')
+  await exitSuccess();
+} catch (err) {
+  logger.info(`Posting youtube episode to spotify failed: ${err}`);
+  await exitFailure();
+}
 
-function exitSuccess() {
-  try {
-    cleanUp();
-  } catch (err) {
-    /* empty */
-  }
+async function exitSuccess() {
+  await cleanUp();
   exit(0);
 }
 
-function exitFailure() {
-  cleanUp();
+async function exitFailure() {
+  await cleanUp();
   exit(1);
 }
 
 function cleanUp() {
-  shutdownLogger();
+  return new Promise((resolve) => {
+    shutdownLogger(() => resolve());
+  });
 }
