@@ -47,14 +47,15 @@ async function main() {
 
 configureLogger();
 
-try {
-  await main();
-  logger.info('Finished successfully.')
-  await exitSuccess();
-} catch (err) {
-  logger.info(`Posting youtube episode to spotify failed: ${err}`);
-  await exitFailure();
-}
+main()
+  .then(async () => {
+    logger.info('Finished successfully.');
+    await exitSuccess();
+  })
+  .catch(async (err) => {
+    logger.info(`Posting youtube episode to spotify failed: ${err}`);
+    await exitFailure();
+  });
 
 async function exitSuccess() {
   await cleanUp();
