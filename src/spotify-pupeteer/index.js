@@ -130,11 +130,7 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function loginAndWaitForNewEpisodeWizard() {
-    if (env.SPOTIFY_LOGIN) {
-      await spotifyLogin();
-    } else {
-      await spotifyLogin();
-    }
+    await spotifyLogin();
     try {
       logger('-- Waiting for navigation after logging in');
       await page.waitForNavigation();
@@ -150,22 +146,6 @@ async function postEpisode(youtubeVideoInfo) {
       logger.info('-- No need to accept spotify auth');
       return Promise.resolve();
     });
-  }
-
-  async function spotifyLogin() {
-    logger.info('-- Accessing Spotify for Podcasters login page');
-    await clickSelector(page, '::-p-xpath(//button[contains(text(), "Continue")])');
-
-    logger.info('-- Logging in');
-    /* The reason for the wait is because
-    spotify can take a little longer to load the form for logging in
-    and because pupeteer treats the page as loaded(or navigated to)
-    even when the form is not showed
-    */
-    await page.waitForSelector('#email');
-    await page.type('#email', env.SPOTIFY_EMAIL);
-    await page.type('#password', env.SPOTIFY_PASSWORD);
-    await clickSelector(page, 'button[type=submit]');
   }
 
   async function spotifyLogin() {
