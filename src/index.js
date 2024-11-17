@@ -4,7 +4,7 @@ const { exit } = require('process');
 const { configureLogger, getLogger, shutdownLogger } = require('./logger');
 const env = require('./environment-variables');
 const { getVideoInfo, downloadThumbnail, downloadAudio } = require('./youtube-yt-dlp');
-const { postEpisode } = require('./spotify-pupeteer');
+const { postEpisode } = require('./spotify-puppeteer');
 
 const logger = getLogger();
 

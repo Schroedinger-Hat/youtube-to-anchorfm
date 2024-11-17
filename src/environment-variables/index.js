@@ -19,7 +19,7 @@ const defaultValues = {
   AUDIO_FILE_TEMPLATE: 'episode.%(ext)s',
   THUMBNAIL_FILE_FORMAT: 'jpg',
   THUMBNAIL_FILE_TEMPLATE: 'thumbnail.%(ext)s',
-  PUPETEER_HEADLESS: true,
+  PUPPETEER_HEADLESS: true,
 };
 
 const dotEnvVariables = parseDotEnvVariables();
@@ -90,5 +90,5 @@ module.exports = {
     getDotEnvironmentVariable('THUMBNAIL_FILE_TEMPLATE'),
     getDotEnvironmentVariable('THUMBNAIL_FILE_FORMAT')
   ),
-  PUPETEER_HEADLESS: getBoolean(getDotEnvironmentVariable('PUPETEER_HEADLESS')),
+  PUPPETEER_HEADLESS: getBoolean(getDotEnvironmentVariable('PUPPETEER_HEADLESS')),
 };
