@@ -71,15 +71,12 @@ jobs:
         env:
           SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL }}
           SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD }}
-          SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL }}
-          SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD }}
           EPISODE_PATH: /github/workspace
 ```
 
 **NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _SPOTIFY_EMAIL_ and _SPOTIFY_PASSWORD_. This environment variables are mandatory as they specify the sign in account. 
 
-Instead the _SPOTIFY_EMAIL_ and _SPOTIFY_PASSWORD_ are not mandatory but can still be set, if needed, and will be used for the new login form if the env variable _SPOTIFY_LOGIN_ is set to false.
-
+**NOTE**: Since [PR#127](https://github.com/Schroedinger-Hat/youtube-to-anchorfm/issues/127) the project remove any reference to Anchor.fm due to the Spotify acquisition of the company (you can read more [here](https://medium.com/anchor/anchor-is-joining-spotify-70356e3ac23f)).
 
 ## Environment variables
 
