@@ -7,8 +7,6 @@ const defaultValues = {
   SPOTIFY_LOGIN: true,
   SPOTIFY_EMAIL: '',
   SPOTIFY_PASSWORD: '',
-  SPOTIFY_EMAIL: '',
-  SPOTIFY_PASSWORD: '',
   UPLOAD_TIMEOUT: 60 * 5 * 1000,
   SAVE_AS_DRAFT: false,
   LOAD_THUMBNAIL: false,
