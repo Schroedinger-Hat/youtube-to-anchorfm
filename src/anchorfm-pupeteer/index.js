@@ -91,6 +91,7 @@ async function postEpisode(youtubeVideoInfo) {
 
     logger.info('Yay');
   } catch (err) {
+    logger.info(`Unable to post episode to spotify: ${err}`);
     if (page !== undefined) {
       logger.info('Screenshot base64:');
       const screenshotBinary = await page.screenshot({
@@ -109,7 +110,7 @@ async function postEpisode(youtubeVideoInfo) {
   async function openNewPage(url) {
     const newPage = await browser.newPage();
     await newPage.goto(url);
-    await newPage.setViewport({ width: 1600, height: 789 });
+    await newPage.setViewport({ width: 2560, height: 1440 });
     return newPage;
   }
 
@@ -181,7 +182,7 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   function acceptSpotifyAuth() {
-    logger.info('-- Trying to accepting spotify auth');
+    logger.info('-- Trying to accept spotify auth');
     return clickSelector(page, 'button[data-testid="auth-accept"]').then(() => SPOTIFY_AUTH_ACCEPTED);
   }
 
@@ -194,7 +195,8 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function uploadEpisode() {
-    logger.info('-- Uploading audio file');
+    logger.info('-- Uploading audio file(waiting 5 seconds before initiating process)');
+    await sleepSeconds(5);
     await page.waitForSelector('input[type=file]');
     const inputFile = await page.$('input[type=file]');
     await inputFile.uploadFile(env.AUDIO_FILE);
@@ -234,10 +236,11 @@ async function postEpisode(youtubeVideoInfo) {
     }
 
     logger.info('-- Selecting content type(explicit or no explicit)');
-    const selectorForExplicitContentLabel = env.IS_EXPLICIT
-      ? 'input[type="radio"][id="explicit-content"]'
-      : 'input[type="radio"][id="no-explicit-content"]';
-    await clickSelector(page, selectorForExplicitContentLabel, { visible: true });
+    if (env.IS_EXPLICIT) {
+      const explicitContentCheckboxLabelSelector =
+        '::-p-xpath(//span[contains(text(), "Explicit content")]/parent::*/parent::*//label)';
+      await clickSelector(page, explicitContentCheckboxLabelSelector);
+    }
 
     logger.info('-- Selection content sponsorship (sponsored or not sponsored)');
     const selectorForSponsoredContent = env.IS_SPONSORED
