@@ -16,7 +16,6 @@ function addUrlToDescription(youtubeVideoInfo) {
 
 async function setPublishDate(page, date) {
   logger.info('-- Setting publish date');
-  await clickSelector(page, 'input[type="radio"][id="publish-date-schedule"]');
   await page.waitForSelector('#date-input', { visible: true });
   await clickSelector(page, '#date-input');
 
@@ -70,13 +69,13 @@ async function postEpisode(youtubeVideoInfo) {
     await uploadEpisode();
 
     logger.info('Filling required podcast details');
-    await fillRequiredDetails();
+    await fillDetails();
 
-    logger.info('Filling optional podcast details');
-    await fillOptionalDetails();
+    logger.info('Going to Review and Publish step');
+    await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
 
-    logger.info('Skipping Interact step');
-    await skipInteractStep();
+    logger.info('Filling details in Review and Publish step');
+    await fillReviewAndPublishDetails();
 
     logger.info('Save draft or publish');
     await saveDraftOrScheduleOrPublish();
@@ -208,7 +207,7 @@ async function postEpisode(youtubeVideoInfo) {
     logger.info('-- Audio file is uploaded');
   }
 
-  async function fillRequiredDetails() {
+  async function fillDetails() {
     logger.info('-- Adding title');
     const titleInputSelector = '#title-input';
     await page.waitForSelector(titleInputSelector, { visible: true });
@@ -226,33 +225,6 @@ async function postEpisode(youtubeVideoInfo) {
       await page.type('div[role="textbox"]', finalDescription);
     }
 
-    if (env.SET_PUBLISH_DATE) {
-      const dateDisplay = `${youtubeVideoInfo.uploadDate.day} ${youtubeVideoInfo.uploadDate.monthAsFullWord}, ${youtubeVideoInfo.uploadDate.year}`;
-      logger.info('-- Schedule publishing for date: ', dateDisplay);
-      await setPublishDate(page, youtubeVideoInfo.uploadDate);
-    } else {
-      logger.info('-- No schedule, should publish immediately');
-      await clickSelector(page, 'input[type="radio"][id="publish-date-now"]');
-    }
-
-    logger.info('-- Selecting content type(explicit or no explicit)');
-    if (env.IS_EXPLICIT) {
-      const explicitContentCheckboxLabelSelector =
-        '::-p-xpath(//span[contains(text(), "Explicit content")]/parent::*/parent::*//label)';
-      await clickSelector(page, explicitContentCheckboxLabelSelector);
-    }
-
-    logger.info('-- Selection content sponsorship (sponsored or not sponsored)');
-    const selectorForSponsoredContent = env.IS_SPONSORED
-      ? 'input[type="radio"][id="sponsored-content"]'
-      : 'input[type="radio"][id="no-sponsored-content"]';
-    await clickSelector(page, selectorForSponsoredContent, { visible: true });
-  }
-
-  async function fillOptionalDetails() {
-    logger.info('-- Clicking Additional Details');
-    await clickSelector(page, '::-p-xpath(//button[contains(text(), "Additional details")])');
-
     if (env.LOAD_THUMBNAIL) {
       logger.info('-- Uploading episode art');
       const imageUploadInputSelector = 'input[type="file"][accept*="image"]';
@@ -269,15 +241,30 @@ async function postEpisode(youtubeVideoInfo) {
         timeout: env.UPLOAD_TIMEOUT,
       });
     }
+
+    logger.info('-- Selecting content type(explicit or no explicit)');
+    if (env.IS_EXPLICIT) {
+      const explicitContentCheckboxLabelSelector = '::-p-xpath(//input[@name="podcastEpisodeIsExplicit"]/parent::*)';
+      await clickSelector(page, explicitContentCheckboxLabelSelector);
+    }
+
+    logger.info('-- Selection promotional content(formerly content sponsorship - sponsored or not sponsored)');
+    const selectorForSponsoredContent = env.IS_SPONSORED
+      ? 'input[type="radio"][name="sponsored-content"]'
+      : 'input[type="radio"][id="no-sponsored-content"]';
+    await clickSelector(page, selectorForSponsoredContent, { visible: true });
   }
 
-  async function skipInteractStep() {
-    logger.info('-- Going to Interact step so we can skip it');
-    await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
-    logger.info('-- Waiting before clicking next again to skip Interact step');
-    await sleepSeconds(1);
-    logger.info('-- Going to final step by skipping Interact step');
-    await clickSelector(page, '::-p-xpath(//span[text()="Next"]/parent::button)');
+  async function fillReviewAndPublishDetails() {
+    if (env.SET_PUBLISH_DATE) {
+      await clickSelector(page, 'input[type="radio"][id="publish-date-schedule"]');
+      const dateDisplay = `${youtubeVideoInfo.uploadDate.day} ${youtubeVideoInfo.uploadDate.monthAsFullWord}, ${youtubeVideoInfo.uploadDate.year}`;
+      logger.info('-- Schedule publishing for date: ', dateDisplay);
+      await setPublishDate(page, youtubeVideoInfo.uploadDate);
+    } else {
+      logger.info('-- No schedule, should publish immediately');
+      await clickSelector(page, 'input[type="radio"][id="publish-date-now"]');
+    }
   }
 
   async function saveDraftOrScheduleOrPublish() {
