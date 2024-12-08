@@ -18,8 +18,8 @@ function getLogger() {
   return log4js.getLogger('default');
 }
 
-function shutdownLogger() {
-  log4js.shutdown();
+function shutdownLogger(cb) {
+  log4js.shutdown(cb);
 }
 
 module.exports = {
