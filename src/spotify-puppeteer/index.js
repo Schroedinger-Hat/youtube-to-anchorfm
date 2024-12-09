@@ -52,7 +52,7 @@ async function postEpisode(youtubeVideoInfo) {
 
   try {
     logger.info('Launching puppeteer');
-    browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPETEER_HEADLESS });
+    browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: env.PUPPETEER_HEADLESS });
 
     page = await openNewPage('https://podcasters.spotify.com/pod/dashboard/episode/wizard');
 
@@ -83,7 +83,7 @@ async function postEpisode(youtubeVideoInfo) {
     /*
     This is a workaround solution of the problem where the podcast
     is sometimes saved as draft with title "Untitled" and no other metadata.
-    We navigate to the spotify/anchorfm dashboard immediately after podcast is
+    We navigate to the spotify/spotify dashboard immediately after podcast is
     published/scheduled.
      */
     await goToDashboard();
@@ -99,7 +99,7 @@ async function postEpisode(youtubeVideoInfo) {
       });
       logger.info(`data:image/png;base64,${Buffer.from(screenshotBinary).toString('base64')}`);
     }
-    throw new Error(`Unable to post episode to anchorfm: ${err}`);
+    throw new Error(`Unable to post episode to spotify: ${err}`);
   } finally {
     if (browser !== undefined) {
       await browser.close();
@@ -130,11 +130,7 @@ async function postEpisode(youtubeVideoInfo) {
   }
 
   async function loginAndWaitForNewEpisodeWizard() {
-    if (env.ANCHOR_LOGIN) {
-      await anchorLogin();
-    } else {
-      await spotifyLogin();
-    }
+    await spotifyLogin();
     try {
       logger('-- Waiting for navigation after logging in');
       await page.waitForNavigation();
@@ -150,22 +146,6 @@ async function postEpisode(youtubeVideoInfo) {
       logger.info('-- No need to accept spotify auth');
       return Promise.resolve();
     });
-  }
-
-  async function anchorLogin() {
-    logger.info('-- Accessing Spotify for Podcasters login page');
-    await clickSelector(page, '::-p-xpath(//button[contains(text(), "Continue")])');
-
-    logger.info('-- Logging in');
-    /* The reason for the wait is because
-    anchorfm can take a little longer to load the form for logging in
-    and because pupeteer treats the page as loaded(or navigated to)
-    even when the form is not showed
-    */
-    await page.waitForSelector('#email');
-    await page.type('#email', env.ANCHOR_EMAIL);
-    await page.type('#password', env.ANCHOR_PASSWORD);
-    await clickSelector(page, 'button[type=submit]');
   }
 
   async function spotifyLogin() {
